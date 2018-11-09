@@ -1,6 +1,10 @@
 import UIKit
 
 class CardView: UIView {
+    let num1Label = UILabel()
+    let num2Label = UILabel()
+    let operationLabel = UILabel()
+    let answerLabel = UILabel()
     
     let horizontalMargin: CGFloat = 32
     let verticalSpacing: CGFloat = 32
@@ -15,9 +19,17 @@ class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //    func renderCard(num1: Int, num2: Int) {
-    //
-    //    }
+    func renderCard(_ card: Card) {
+        num1Label.text = String(card.num1)
+        num2Label.text = String(card.num2)
+        operationLabel.text = String(card.operation)
+        answerLabel.text = String(card.answer)
+        answerLabel.isHidden = true
+    }
+    
+    func renderAnswerShown(_ isShown: Bool) {
+        answerLabel.isHidden = !isShown
+    }
 }
 
 private extension CardView {
@@ -28,19 +40,19 @@ private extension CardView {
         var constraints: [NSLayoutConstraint] = []
         
         backgroundColor = .white
-        
-        let num1Label = createNumberLabel(number: 8)
+
+        setupLabel(num1Label)
+        num1Label.textAlignment = .right
         addSubview(num1Label)
         constraints.append(contentsOf: createHorizontalAnchorConstraints(num1Label, constant: numberMargin))
         constraints.append(num1Label.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
 
-        let num2Label = createNumberLabel(number: 6)
+        setupLabel(num2Label)
         addSubview(num2Label)
         constraints.append(createRightAnchorConstraint(num2Label, superview: self, constant: numberMargin))
         constraints.append(constrainTopToBottom(bottomView: num2Label, topView: num1Label))
 
-
-        let operationLabel = createLabel(text: "+")
+        setupLabel(operationLabel)
         addSubview(operationLabel)
         constraints.append(operationLabel.rightAnchor.constraint(equalTo: num2Label.leftAnchor, constant: -horizontalMargin))
         constraints.append(operationLabel.bottomAnchor.constraint(equalTo:num2Label.bottomAnchor))
@@ -53,7 +65,8 @@ private extension CardView {
         constraints.append(contentsOf: createHorizontalAnchorConstraints(barView, constant: horizontalMargin))
         constraints.append(constrainTopToBottom(bottomView: barView, topView: num2Label))
     
-        let answerLabel = createNumberLabel(number: 14)
+        setupLabel(answerLabel)
+        answerLabel.textAlignment = .right
         addSubview(answerLabel)
         constraints.append(contentsOf: createHorizontalAnchorConstraints(answerLabel, constant: numberMargin))
         constraints.append(constrainTopToBottom(bottomView: answerLabel, topView: barView))
@@ -61,21 +74,11 @@ private extension CardView {
         constraints.forEach{ $0.isActive = true }
     }
     
-    func createLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
+    func setupLabel(_ label: UILabel) {
         label.font = UIFont.systemFont(ofSize: 100)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        
         label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }
-    
-    func createNumberLabel(number: Int) -> UILabel {
-        let label = createLabel(text: String(number))
-        label.textAlignment = .right
-        return label
     }
     
     func createHorizontalAnchorConstraints(_ view: UIView, constant: CGFloat) -> [NSLayoutConstraint] {
