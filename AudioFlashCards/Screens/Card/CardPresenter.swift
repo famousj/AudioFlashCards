@@ -9,7 +9,13 @@ class CardPresenter {
         
         self.view = view
         view.delegate = self
-        view.renderCard(cardModel.nextCard())
+        showNextCard()
+    }
+    
+    private func showNextCard() {
+        guard let nextCard = cardModel.nextCard() else { return }
+        
+        view.renderCard(nextCard)
     }
 }
 
@@ -19,6 +25,6 @@ extension CardPresenter: CardViewDelegate {
     }
     
     func cardViewEvent_gesturedDoneWithCard() {
-        view.renderCard(cardModel.nextCard())
+        showNextCard()
     }
 }

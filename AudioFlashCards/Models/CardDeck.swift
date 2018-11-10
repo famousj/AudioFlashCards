@@ -3,6 +3,11 @@ import Foundation
 struct CardDeck {
     let cards: [Card]
     
+    func dropFirstCard() -> CardDeck {
+        let cards = Array(self.cards.dropFirst())
+        return CardDeck(cards: cards)
+    }
+    
     static func additionDeck(min: Int, max: Int) -> CardDeck {
         let cards = (min...max).flatMap { (i) in
             (min...max).map { (j) in
@@ -11,6 +16,4 @@ struct CardDeck {
         }
         return CardDeck(cards: cards.shuffled())
     }
-    
-    
 }

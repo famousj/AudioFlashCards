@@ -13,7 +13,7 @@ class CardPresenterTest: XCTestCase {
     func test_OnInit_SendsModelNextCardToView() {
         let model = CardModelMock()
         let testCard = Card.testInstance
-        model.nextCard_nextReturnValues = [testCard]
+        model.nextCard_nextReturnValue = testCard
         
         let view = CardViewMock()
         
@@ -35,25 +35,39 @@ class CardPresenterTest: XCTestCase {
     func test_WhenViewGesturedDoneWithCard_ThenRenderViewWithNextCard() {
         let view = CardViewMock()
         let model = CardModelMock()
-        let firstCard = Card.testInstance
-        let secondCard = Card.testInstance
-        model.nextCard_nextReturnValues = [firstCard, secondCard]
         
         let testObject = CardPresenter(cardModel: model, view: view)
 
+        view.renderCard_counter = 0
+        let card = Card.testInstance
+        model.nextCard_nextReturnValue = card
+
         testObject.cardViewEvent_gesturedDoneWithCard()
         
-        XCTAssertEqual(view.renderCard_counter, 2)
-        XCTAssertEqual(view.renderCard_paramCard, secondCard)
+        XCTAssertEqual(view.renderCard_counter, 1)
+        XCTAssertEqual(view.renderCard_paramCard, card)
+    }
+    
+    func test_WhenViewGesturedDoneWithCard_AndNextCardIsNil_ThenDoNotRenderView() {
+        let view = CardViewMock()
+        let model = CardModelMock()
+        
+        let testObject = CardPresenter(cardModel: model, view: view)
+        
+        view.renderCard_counter = 0
+        model.nextCard_nextReturnValue = nil
+        testObject.cardViewEvent_gesturedDoneWithCard()
+        
+        XCTAssertEqual(view.renderCard_counter, 0)
     }
 }
 
 class CardModelMock: CardModel {
     var nextCard_counter = 0
-    var nextCard_nextReturnValues: [Card] = []
-    override func nextCard() -> Card {
+    var nextCard_nextReturnValue: Card?
+    override func nextCard() -> Card? {
         nextCard_counter += 1
-        return nextCard_nextReturnValues.removeFirst()
+        return nextCard_nextReturnValue
     }
 }
 

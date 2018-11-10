@@ -2,6 +2,21 @@ import XCTest
 @testable import AudioFlashCards
 
 class CardDeckTest: XCTestCase {
+    
+    func test_dropFirstCard_createsNewDeckMinusTopCard() {
+        let cards = [Card.testInstance, Card.testInstance, Card.testInstance]
+        let deck = CardDeck(cards: cards)
+        
+        let newDeck = deck.dropFirstCard()
+        XCTAssertEqual(newDeck.cards, Array(cards.dropFirst()))
+    }
+    
+    func test_dropFirstCard_ifDeckIsEmpty_returnsEmptyDeck() {
+        let deck = CardDeck(cards: [])
+        
+        let newDeck = deck.dropFirstCard()
+        XCTAssertEqual(newDeck.cards, [])
+    }
 
     func test_additionDeck_createsAdditionCards_randomized() {
         let min = Int.random(in: 0...10)
