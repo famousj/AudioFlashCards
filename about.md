@@ -9,7 +9,6 @@ First, consider delivering value.  Here's how I see things:
 - A randomized set of flash cards.  Just like the paper cards only on my phone
 - Flash cards that listen for an answer and let you know if it's right or wrong
   (Alternately, this might be "scaffolded" with some buttons for manual entry)
-
 - Profiles: keep track of settings for the various LeBlanc boys
 - Other operations, subtraction, multiplication, etc.
 
@@ -31,3 +30,8 @@ First create stubs for a model-view-presenter.  Then write the view.  (Note: I a
 So, now we have a card.  Next, hide the answer.  Wire up some events and reveal the answer if you tap the card.  Then tapping again will get the next card.
 
 Now we need a whole deck of cards, instead of our one generic card.
+
+Done.  Actually, this was a bit easier than I'd anticipated, which is good, since I think the audio will be harder than I'm expecting.
+
+
+
