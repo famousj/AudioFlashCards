@@ -13,6 +13,8 @@
 		D8E7CA802196931C00E6A0D9 /* AdditionCardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA7F2196931C00E6A0D9 /* AdditionCardTest.swift */; };
 		D8E7CA822196939700E6A0D9 /* CardPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA812196939700E6A0D9 /* CardPresenterTest.swift */; };
 		D8E7CA842196951B00E6A0D9 /* CardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA832196951B00E6A0D9 /* CardTest.swift */; };
+		D8E7CA862197384600E6A0D9 /* CardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA852197384600E6A0D9 /* CardDeck.swift */; };
+		D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */; };
 		D8EA8C3C2194AAF700B1D9D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C3B2194AAF700B1D9D7 /* AppDelegate.swift */; };
 		D8EA8C3E2194AAF700B1D9D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C3D2194AAF700B1D9D7 /* ViewController.swift */; };
 		D8EA8C432194AAF800B1D9D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8EA8C422194AAF800B1D9D7 /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 		D8E7CA7F2196931C00E6A0D9 /* AdditionCardTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionCardTest.swift; sourceTree = "<group>"; };
 		D8E7CA812196939700E6A0D9 /* CardPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPresenterTest.swift; sourceTree = "<group>"; };
 		D8E7CA832196951B00E6A0D9 /* CardTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTest.swift; sourceTree = "<group>"; };
+		D8E7CA852197384600E6A0D9 /* CardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeck.swift; sourceTree = "<group>"; };
+		D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckTest.swift; sourceTree = "<group>"; };
 		D8EA8C382194AAF700B1D9D7 /* AudioFlashCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioFlashCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EA8C3B2194AAF700B1D9D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8EA8C3D2194AAF700B1D9D7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 				D8E7CA7F2196931C00E6A0D9 /* AdditionCardTest.swift */,
 				D828F7F82196186800D5FBFD /* Card.swift */,
 				D8E7CA832196951B00E6A0D9 /* CardTest.swift */,
+				D8E7CA852197384600E6A0D9 /* CardDeck.swift */,
+				D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -256,6 +262,7 @@
 				D8EA8C3E2194AAF700B1D9D7 /* ViewController.swift in Sources */,
 				D8EA8C3C2194AAF700B1D9D7 /* AppDelegate.swift in Sources */,
 				D828F7F92196186800D5FBFD /* Card.swift in Sources */,
+				D8E7CA862197384600E6A0D9 /* CardDeck.swift in Sources */,
 				D8E7CA7E2196931200E6A0D9 /* AdditionCard.swift in Sources */,
 				D8EA8C612195392D00B1D9D7 /* CardView.swift in Sources */,
 				D8EA8C5D219538D800B1D9D7 /* CardController.swift in Sources */,
@@ -269,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8E7CA822196939700E6A0D9 /* CardPresenterTest.swift in Sources */,
+				D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */,
 				D8E7CA7C2196930600E6A0D9 /* CardModelTest.swift in Sources */,
 				D8E7CA802196931C00E6A0D9 /* AdditionCardTest.swift in Sources */,
 				D8E7CA842196951B00E6A0D9 /* CardTest.swift in Sources */,
