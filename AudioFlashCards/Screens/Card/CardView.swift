@@ -1,5 +1,9 @@
 import UIKit
 
+protocol CardViewDelegate: class {
+    func cardViewEvent_gesturedTap()
+}
+
 class CardView: UIView {
     let num1Label = UILabel()
     let num2Label = UILabel()
@@ -8,6 +12,8 @@ class CardView: UIView {
     
     let horizontalMargin: CGFloat = 32
     let verticalSpacing: CGFloat = 32
+    
+    weak var delegate: CardViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: .zero)

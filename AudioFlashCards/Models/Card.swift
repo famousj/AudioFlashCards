@@ -1,6 +1,6 @@
 import Foundation
 
-struct Card {
+struct Card: Equatable {
     let num1: Int
     let num2: Int
     let operation: String
