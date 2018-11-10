@@ -2,7 +2,9 @@ import Foundation
 
 class CardModel {
     
+    
+    
     func nextCard() -> Card {
-        return Card(num1: 6, num2: 8, operation: "+", answer: 14)
+        return Card.AdditionCard(num1: 10, num2: 10)
     }
 }

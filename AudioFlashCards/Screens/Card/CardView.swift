@@ -1,7 +1,8 @@
 import UIKit
 
 protocol CardViewDelegate: class {
-    func cardViewEvent_gesturedTap()
+    func cardViewEvent_gesturedRevealAnswer()
+    func cardViewEvent_gesturedDoneWithCard()
 }
 
 class CardView: UIView {
@@ -25,6 +26,14 @@ class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func viewTapped() {
+        if answerLabel.isHidden {
+            delegate?.cardViewEvent_gesturedRevealAnswer()
+        } else {
+            delegate?.cardViewEvent_gesturedDoneWithCard()
+        }
+    }
+    
     func renderCard(_ card: Card) {
         num1Label.text = String(card.num1)
         num2Label.text = String(card.num2)
@@ -44,6 +53,9 @@ private extension CardView {
         let numberMargin: CGFloat = horizontalMargin * 2
         
         var constraints: [NSLayoutConstraint] = []
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        addGestureRecognizer(tapRecognizer)
         
         backgroundColor = .white
 
