@@ -1,7 +1,7 @@
 import XCTest
 @testable import AudioFlashCards
 
-class CardPresenterTest: XCTestCase {
+class CardPresenterTest: XCTestCase, CardPresenterDelegate {
     
     func test_OnInit_SetsItselfToViewDelegate() {
         let view = CardView()
@@ -9,23 +9,17 @@ class CardPresenterTest: XCTestCase {
         
         XCTAssertTrue(view.delegate! === testObject)
     }
-
-    func test_OnInit_SendsModelNextCardToView() {
-        let model = CardModelMock()
-        let testCard = Card.testInstance
-        model.nextCard_nextReturnValue = testCard
+    
+    func test_OnInit_SetsItselfToModelDelegate() {
+        let model = CardModel()
+        let testObject = CardPresenter(cardModel: model, view: CardView())
         
-        let view = CardViewMock()
-        
-        let _ = CardPresenter(cardModel: model, view: view)
-        XCTAssertEqual(model.nextCard_counter, 1)
-        XCTAssertEqual(view.renderCard_counter, 1)
-        XCTAssertEqual(view.renderCard_paramCard, testCard)
+        XCTAssertTrue(model.delegate! === testObject)
     }
     
     func test_WhenViewGesturedToRevealAnswer_ThenAskViewToRevealAnswer() {
         let view = CardViewMock()
-        let testObject = CardPresenter(cardModel: CardModel(), view: view)
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: view)
         
         testObject.cardViewEvent_gesturedRevealAnswer()
         XCTAssertEqual(view.renderAnswerShown_counter, 1)
@@ -59,6 +53,23 @@ class CardPresenterTest: XCTestCase {
         testObject.cardViewEvent_gesturedDoneWithCard()
         
         XCTAssertEqual(view.renderCard_counter, 0)
+    }
+    
+    func test_WhenCardModelHasErrorListening_ThenInformsDelegate() {
+        let testObject = CardPresenter(cardModel: CardModel(), view: CardView())
+        testObject.delegate = self
+        
+        let testError = NSError(domain: "Another error", code: Int.random(in: 10...20), userInfo: nil)
+        testObject.cardModelEvent_errorListeningForAnswer(error: testError)
+        
+        XCTAssertEqual(cardPresenterEvent_errorListeningForAnswer_paramError! as NSError, testError)
+    }
+    
+    var cardPresenterEvent_errorListeningForAnswer_counter = 0
+    var cardPresenterEvent_errorListeningForAnswer_paramError: Error?
+    func cardPresenterEvent_errorListeningForAnswer(error: Error) {
+        cardPresenterEvent_errorListeningForAnswer_counter += 1
+        cardPresenterEvent_errorListeningForAnswer_paramError = error
     }
 }
 

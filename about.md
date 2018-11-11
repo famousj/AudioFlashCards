@@ -33,5 +33,22 @@ Now we need a whole deck of cards, instead of our one generic card.
 
 Done.  Actually, this was a bit easier than I'd anticipated, which is good, since I think the audio will be harder than I'm expecting.
 
+As I'm digging into the speech recognition, you have to grant permission to listen in. (Sensible enough from a privacy standpoint)  Which means that if the user rejects the request for speech recognition, I need to do something.  Either disable the app until the user fixes it or have some kind of manual answer checking.
+
+Also, speech recognition exists in the realm of engineering, not math.  The phone listens to the user and basically makes a guess about what is being said.  You don't get anything definitive, you just have to decide "yeah, somebody said the right answer".
+
+Apple recognizes this.  You can get a transcription, or you can get a "hypothesis", which will give you a level of confidence.  
+
+For a first pass, I will give a try for the regular transcription, and display the recognition results to the screen.  This might work with a bit of tinkering (e.g. if Apple thinks someone said "mine", it's probably 9.)
+
+As a policy, I don't write tests for View code.  As part of this, I try to make sure there's almost zero actual logic in the View.  There doesn't seem to be a good way to do unit tests for the speech recognition.  On the other hand, like th e View code, it's either going to work or it isn't.
+
+So while the speech recognition code is untested, I'll endeavor to keep it isolated and as simple as possible.  There's an unfortunate amount of copy-paste from Apple's code but on the positive side, that code has been well-vetted.
+
+
+
+
+
+
 
 

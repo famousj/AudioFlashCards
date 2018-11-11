@@ -10,6 +10,7 @@ class CardView: UIView {
     let num2Label = UILabel()
     let operationLabel = UILabel()
     let answerLabel = UILabel()
+    let barView = UIView()
     
     let horizontalMargin: CGFloat = 32
     let verticalSpacing: CGFloat = 32
@@ -38,6 +39,7 @@ class CardView: UIView {
         num1Label.text = String(card.num1)
         num2Label.text = String(card.num2)
         operationLabel.text = String(card.operation)
+        barView.isHidden = false
         answerLabel.text = String(card.answer)
         answerLabel.isHidden = true
     }
@@ -75,8 +77,8 @@ private extension CardView {
         constraints.append(operationLabel.rightAnchor.constraint(equalTo: num2Label.leftAnchor, constant: -horizontalMargin))
         constraints.append(operationLabel.bottomAnchor.constraint(equalTo:num2Label.bottomAnchor))
 
-        let barView = UIView()
         barView.backgroundColor = .black
+        barView.isHidden = true
         addSubview(barView)
         barView.translatesAutoresizingMaskIntoConstraints = false
         constraints.append(barView.heightAnchor.constraint(equalToConstant: 15))
