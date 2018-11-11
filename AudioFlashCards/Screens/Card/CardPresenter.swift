@@ -28,7 +28,7 @@ class CardPresenter {
 
 extension CardPresenter: CardViewDelegate {
     func cardViewEvent_gesturedRevealAnswer() {
-        view.renderAnswerShown(true)
+        view.renderAnswerShown(answerIsCorrect: false)
     }
     
     func cardViewEvent_gesturedDoneWithCard() {
@@ -37,6 +37,18 @@ extension CardPresenter: CardViewDelegate {
 }
 
 extension CardPresenter: CardModelDelegate {
+    
+    func cardModelEvent_textRecognized(text: String) {
+        view.renderRecognitionText(text: text)
+    }
+    
+    func cardModelEvent_correctAnswerRecognized() {
+        view.renderAnswerShown(answerIsCorrect: true)
+    }
+    
+    func cardModelEvent_wrongAnswerRecognized() {
+        view.renderAnswerShown(answerIsCorrect: false)
+    }
     
     func cardModelEvent_errorListeningForAnswer(error: Error) {
         delegate?.cardPresenterEvent_errorListeningForAnswer(error: error)

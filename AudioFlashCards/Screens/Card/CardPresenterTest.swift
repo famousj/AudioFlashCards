@@ -23,7 +23,7 @@ class CardPresenterTest: XCTestCase, CardPresenterDelegate {
         
         testObject.cardViewEvent_gesturedRevealAnswer()
         XCTAssertEqual(view.renderAnswerShown_counter, 1)
-        XCTAssertEqual(view.renderAnswerShown_paramIsShown, true)
+        XCTAssertEqual(view.renderAnswerShown_paramAnswerIsCorrect, false)
     }
     
     func test_WhenViewGesturedDoneWithCard_ThenRenderViewWithNextCard() {
@@ -65,6 +65,37 @@ class CardPresenterTest: XCTestCase, CardPresenterDelegate {
         XCTAssertEqual(cardPresenterEvent_errorListeningForAnswer_paramError! as NSError, testError)
     }
     
+    func test_WhenModelReceivesAnswerText_ThenUpdatesView() {
+        let view = CardViewMock()
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: view)
+        
+        let testText = String(Int.random(in: 10...100))
+        testObject.cardModelEvent_textRecognized(text: testText)
+        
+        XCTAssertEqual(view.renderRecognitionText_counter, 1)
+        XCTAssertTrue(view.renderRecognitionText_paramText == testText)
+    }
+    
+    func test_WhenModelReceivesCorrectAnswer_ThenTellsViewToRevealAnswer() {
+        let view = CardViewMock()
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: view)
+        
+        testObject.cardModelEvent_correctAnswerRecognized()
+        
+        XCTAssertEqual(view.renderAnswerShown_counter, 1)
+        XCTAssertEqual(view.renderAnswerShown_paramAnswerIsCorrect, true)
+    }
+    
+    func test_WhenModelReceivesWrongAnswer_ThenTellsViewToRevealAnswerAsIncorrect() {
+        let view = CardViewMock()
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: view)
+        
+        testObject.cardModelEvent_wrongAnswerRecognized()
+        
+        XCTAssertEqual(view.renderAnswerShown_counter, 1)
+        XCTAssertEqual(view.renderAnswerShown_paramAnswerIsCorrect, false)
+    }
+    
     var cardPresenterEvent_errorListeningForAnswer_counter = 0
     var cardPresenterEvent_errorListeningForAnswer_paramError: Error?
     func cardPresenterEvent_errorListeningForAnswer(error: Error) {
@@ -91,10 +122,17 @@ class CardViewMock: CardView {
     }
     
     var renderAnswerShown_counter = 0
-    var renderAnswerShown_paramIsShown: Bool?
-    override func renderAnswerShown(_ isShown: Bool) {
+    var renderAnswerShown_paramAnswerIsCorrect: Bool?
+    override func renderAnswerShown(answerIsCorrect: Bool) {
         renderAnswerShown_counter += 1
-        renderAnswerShown_paramIsShown = isShown
+        renderAnswerShown_paramAnswerIsCorrect = answerIsCorrect
+    }
+    
+    var renderRecognitionText_counter = 0
+    var renderRecognitionText_paramText: String?
+    override func renderRecognitionText(text: String) {
+        renderRecognitionText_counter += 1
+        renderRecognitionText_paramText = text
     }
 }
 

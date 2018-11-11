@@ -17,6 +17,8 @@
 		D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */; };
 		D8E7CA8D2198720400E6A0D9 /* NumberRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */; };
 		D8E7CA8F2198950800E6A0D9 /* CardControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA8E2198950800E6A0D9 /* CardControllerTest.swift */; };
+		D8E7CA912198BCFA00E6A0D9 /* NumberFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */; };
+		D8E7CA932198C25D00E6A0D9 /* NumberFilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */; };
 		D8EA8C3C2194AAF700B1D9D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C3B2194AAF700B1D9D7 /* AppDelegate.swift */; };
 		D8EA8C432194AAF800B1D9D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8EA8C422194AAF800B1D9D7 /* Assets.xcassets */; };
 		D8EA8C462194AAF800B1D9D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EA8C442194AAF800B1D9D7 /* LaunchScreen.storyboard */; };
@@ -47,6 +49,8 @@
 		D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckTest.swift; sourceTree = "<group>"; };
 		D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberRecognizer.swift; sourceTree = "<group>"; };
 		D8E7CA8E2198950800E6A0D9 /* CardControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardControllerTest.swift; sourceTree = "<group>"; };
+		D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFilter.swift; sourceTree = "<group>"; };
+		D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFilterTest.swift; sourceTree = "<group>"; };
 		D8EA8C382194AAF700B1D9D7 /* AudioFlashCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioFlashCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EA8C3B2194AAF700B1D9D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8EA8C422194AAF800B1D9D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */,
+				D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */,
+				D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -278,6 +284,7 @@
 				D8E7CA8D2198720400E6A0D9 /* NumberRecognizer.swift in Sources */,
 				D8EA8C5D219538D800B1D9D7 /* CardController.swift in Sources */,
 				D8EA8C632195394B00B1D9D7 /* CardPresenter.swift in Sources */,
+				D8E7CA912198BCFA00E6A0D9 /* NumberFilter.swift in Sources */,
 				D8EA8C652195395400B1D9D7 /* CardModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +298,7 @@
 				D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */,
 				D8E7CA7C2196930600E6A0D9 /* CardModelTest.swift in Sources */,
 				D8E7CA802196931C00E6A0D9 /* AdditionCardTest.swift in Sources */,
+				D8E7CA932198C25D00E6A0D9 /* NumberFilterTest.swift in Sources */,
 				D8E7CA842196951B00E6A0D9 /* CardTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

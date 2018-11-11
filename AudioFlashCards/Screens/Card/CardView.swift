@@ -9,11 +9,9 @@ class CardView: UIView {
     let num1Label = UILabel()
     let num2Label = UILabel()
     let operationLabel = UILabel()
-    let answerLabel = UILabel()
     let barView = UIView()
-    
-    let horizontalMargin: CGFloat = 32
-    let verticalSpacing: CGFloat = 32
+    let answerLabel = UILabel()
+    let speechRecognitionLabel = UILabel()
     
     weak var delegate: CardViewDelegate?
     
@@ -44,13 +42,25 @@ class CardView: UIView {
         answerLabel.isHidden = true
     }
     
-    func renderAnswerShown(_ isShown: Bool) {
-        answerLabel.isHidden = !isShown
+    func renderAnswerShown(answerIsCorrect: Bool) {
+        if answerIsCorrect {
+            answerLabel.textColor = .black
+        } else {
+            answerLabel.textColor = .red
+        }
+        
+        answerLabel.isHidden = false
+    }
+    
+    func renderRecognitionText(text: String) {
+        speechRecognitionLabel.text = text
     }
 }
 
 private extension CardView {
     func layout() {
+        let horizontalMargin: CGFloat = 32
+
         let verticalMargin: CGFloat = 60
         let numberMargin: CGFloat = horizontalMargin * 2
         
@@ -91,11 +101,17 @@ private extension CardView {
         constraints.append(contentsOf: createHorizontalAnchorConstraints(answerLabel, constant: numberMargin))
         constraints.append(constrainTopToBottom(bottomView: answerLabel, topView: barView))
         
+        setupLabel(speechRecognitionLabel, fontSize: 12)
+        speechRecognitionLabel.backgroundColor = .yellow
+        speechRecognitionLabel.numberOfLines = 0
+        addSubview(speechRecognitionLabel)
+        constraints.append(contentsOf: createHorizontalAnchorConstraints(speechRecognitionLabel, constant: horizontalMargin))
+        constraints.append(speechRecognitionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin))
         constraints.forEach{ $0.isActive = true }
     }
     
-    func setupLabel(_ label: UILabel) {
-        label.font = UIFont.systemFont(ofSize: 100)
+    func setupLabel(_ label: UILabel, fontSize: CGFloat = 100) {
+        label.font = UIFont.systemFont(ofSize: fontSize)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -117,6 +133,7 @@ private extension CardView {
     }
     
     func constrainTopToBottom(bottomView: UIView, topView: UIView) -> NSLayoutConstraint {
+        let verticalSpacing: CGFloat = 32
         return bottomView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: verticalSpacing)
     }
 }

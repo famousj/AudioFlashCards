@@ -1,6 +1,10 @@
 import Foundation
 import Speech
 
+protocol NumberRecognizerDelegate: class {
+    func numberRecognizerEvent_textRecognized(text: String)
+}
+
 // Code here is lifted liberally from Apple's Spoken Word demo
 // Details here: https://developer.apple.com/documentation/speech/recognizing_speech_in_live_audio
 class NumberRecognizer: NSObject {
@@ -10,6 +14,8 @@ class NumberRecognizer: NSObject {
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var inputNode: AVAudioInputNode?
+    
+    weak var delegate: NumberRecognizerDelegate?
     
     override init() {
         speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
@@ -57,8 +63,9 @@ class NumberRecognizer: NSObject {
         var isFinal = false
         
         if let result = result {
-            // Update the text view with the results.
-            let text = result.bestTranscription.formattedString
+            let text = result.transcriptions.map { $0.formattedString }.joined(separator: "\n")
+
+            delegate?.numberRecognizerEvent_textRecognized(text: text)
             
             isFinal = result.isFinal
         }

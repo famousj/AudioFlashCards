@@ -45,10 +45,10 @@ As a policy, I don't write tests for View code.  As part of this, I try to make 
 
 So while the speech recognition code is untested, I'll endeavor to keep it isolated and as simple as possible.  There's an unfortunate amount of copy-paste from Apple's code but on the positive side, that code has been well-vetted.
 
+- I have wired the speech recognition listener up to a view at the bottom of the screen, which will show me what iOS _thinks_ was said.  Now I need to figure out if what was said is actually correct.
 
+- Note: in the `SFTranscriptionSegment` object, there's a timestamp which indicates when, in the audio clip, it has found this item.  This can be used to figure out how long it took to answer the question.
 
-
-
-
+- 
 
 
