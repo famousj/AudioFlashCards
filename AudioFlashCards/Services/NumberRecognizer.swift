@@ -19,10 +19,7 @@ class NumberRecognizer: NSObject {
     }
     
     func startListening() throws {
-        
-        let error = NSError(domain: "blah blah", code: 44, userInfo: nil)
-        throw error
-        
+                
         // Cancel the previous task if it's running.
         if let recognitionTask = recognitionTask {
             recognitionTask.cancel()
