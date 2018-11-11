@@ -81,6 +81,16 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertTrue(numberFilter.getNumberFromTranscriptionText_paramText == testText)
     }
     
+    func test_WhenReceiveListenerTextRecognizedEvent_StopsListening() {
+        let numberRecognizer = NumberRecognizerMock()
+        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
+        
+        let testText = String(Int.random(in: 0...20))
+        testObject.numberRecognizerEvent_textRecognized(text: testText)
+        
+        XCTAssertEqual(numberRecognizer.stopListening_counter, 1)
+    }
+    
     func test_WhenReceiveListenerTextRecognizedEvent_AndTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
         let numberFilter = NumberFilterMock()
         let testCard = Card.testInstance
@@ -159,6 +169,11 @@ class NumberRecognizerMock: NumberRecognizer {
         if let error = startListening_nextError {
             throw error
         }
+    }
+    
+    var stopListening_counter = 0
+    override func stopListening() {
+        stopListening_counter += 1
     }
 }
 

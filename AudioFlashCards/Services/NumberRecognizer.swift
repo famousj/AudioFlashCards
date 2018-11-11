@@ -49,6 +49,8 @@ class NumberRecognizer: NSObject {
 //        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, delegate: self) // resultHandler: handleRecognitionResult)
         
         // Configure the microphone input.
+        // TODO: Do we need this?
+//        inputNode!.removeTap(onBus: 0)
         let recordingFormat = inputNode!.outputFormat(forBus: 0)
         inputNode!.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             self.recognitionRequest?.append(buffer)
@@ -57,6 +59,11 @@ class NumberRecognizer: NSObject {
         audioEngine.prepare()
         try audioEngine.start()
         
+    }
+    
+    func stopListening() {
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
     }
     
     func handleRecognitionResult(result: SFSpeechRecognitionResult?, error: Error?) {

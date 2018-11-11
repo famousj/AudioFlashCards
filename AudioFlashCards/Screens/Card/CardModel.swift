@@ -56,6 +56,8 @@ extension CardModel: NumberRecognizerDelegate {
         
         let textNumber = numberFilter.getNumberFromTranscriptionText(text)
         
+        numberRecognizer.stopListening()
+        
         guard let answer = currentCard?.answer else { return }
         
         if textNumber == answer {
