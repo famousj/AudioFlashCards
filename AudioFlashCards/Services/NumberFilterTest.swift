@@ -30,25 +30,14 @@ class NumberFilterTest: XCTestCase {
     func test_getNumberFromTranscriptionText_ConvertsHomophones() {
         let testObject = NumberFilter()
         
-        XCTAssertEqual(testObject.getNumberFromTranscriptionText("Won"), 1)
         XCTAssertEqual(testObject.getNumberFromTranscriptionText("To"), 2)
         XCTAssertEqual(testObject.getNumberFromTranscriptionText("Too"), 2)
         XCTAssertEqual(testObject.getNumberFromTranscriptionText("For"), 4)
-        XCTAssertEqual(testObject.getNumberFromTranscriptionText("Or"), 4)
-        XCTAssertEqual(testObject.getNumberFromTranscriptionText("Ate"), 8)
-        XCTAssertEqual(testObject.getNumberFromTranscriptionText("Mine"), 9)
     }
     
     func test_getNumberFromTranscriptionText_WhenSentNonNumber_ThenReturnsMinusOne() {
         let testObject = NumberFilter()
         
-        XCTAssertEqual(testObject.getNumberFromTranscriptionText(randomString()), -1)
-    }
-    
-    func randomString() -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        let length = Int.random(in: 3...10)
-        return String((0...length-1).map{ _ in letters.randomElement()! })
-        
+        XCTAssertEqual(testObject.getNumberFromTranscriptionText(String.randomString), -1)
     }
 }

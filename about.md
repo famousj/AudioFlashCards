@@ -54,7 +54,7 @@ The last pass will be to dig through the words that iOS thinks it heard and keep
 
 - Hand-rolling mocks for the speech recognition classes was a bit of a pain, and it's making me not want to finish that piece.  Since I'd also like it to be tested, and making an array of mock speech transcriptions is going to be a bit messy.
 
-
+- And it's done!  I ran through all 100 or so cards and got correct speech recognized for all 100 of them.  The only incorrect one was "1+0" which I said (and iOS recognized as) "zero".
 
 
 

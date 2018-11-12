@@ -6,7 +6,7 @@ protocol CardModelDelegate: class {
     func cardModelEvent_textRecognized(text: String)
     func cardModelEvent_correctAnswerRecognized()
     func cardModelEvent_wrongAnswerRecognized()
-
+    
 }
 
 class CardModel {
@@ -58,8 +58,13 @@ extension CardModel: NumberRecognizerDelegate {
     }
     
     func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult) {
-        let text = result.bestTranscription.formattedString
-        let textNumber = numberFilter.getNumberFromTranscriptionText(text)
+        let textNumber = result.transcriptions
+            .map { (transcription) -> Int in
+                let text = transcription.formattedString
+                return numberFilter.getNumberFromTranscriptionText(text)
+            }
+            .filter{ $0 != -1 }
+            .first ?? -1
         
         guard let answer = currentCard?.answer else { return }
         

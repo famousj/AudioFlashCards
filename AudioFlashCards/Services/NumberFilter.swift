@@ -3,15 +3,15 @@ import Speech
 
 class NumberFilter {
     private let zeroWords = ["zero"]
-    private let oneWords = ["one", "won"]
+    private let oneWords = ["one"]
     private let twoWords = ["two", "to", "too"]
     private let threeWords = ["three"]
-    private let fourWords = ["four", "for", "or"]
+    private let fourWords = ["four", "for"]
     private let fiveWords = ["five"]
     private let sixWords = ["six"]
     private let sevenWords = ["seven"]
-    private let eightWords = ["eight", "ate"]
-    private let nineWords = ["nine", "mine"]
+    private let eightWords = ["eight"]
+    private let nineWords = ["nine"]
     
     private var numberWords: [[String]]
     

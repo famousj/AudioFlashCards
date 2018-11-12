@@ -83,6 +83,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     
     func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilterWithBestTransactionText() {
         let numberFilter = NumberFilterMock()
+        numberFilter.getNumberFromTranscriptionText_returnValues = [-1]
         let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         
         let testText = String(Int.random(in: 0...20))
@@ -95,7 +96,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertTrue(numberFilter.getNumberFromTranscriptionText_paramText == testText)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
+    func test_WhenReceiveListenerTextRecognizedEvent_AndFirstTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
         let numberFilter = NumberFilterMock()
         let testCard = Card.testInstance
         let cardDeck = CardDeck(cards: [testCard])
@@ -108,13 +109,66 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         
         let _ = testObject.nextCard()
         
-        numberFilter.getNumberFromTranscriptionText_returnValue = testCard.answer
+        numberFilter.getNumberFromTranscriptionText_returnValues = [testCard.answer]
         testObject.numberRecognizerEvent_receivedFinalResult(result: result)
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndTextDoesNotMatchAnswer_TellsDelegateAnswerIsWrong() {
+    func test_WhenReceiveListenerTextRecognizedEvent_AndLaterTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
+        let numberFilter = NumberFilterMock()
+        let testCard = Card.testInstance
+        let cardDeck = CardDeck(cards: [testCard])
+        
+        let transcriptionsLength: Int = Int.random(in: 5...10)
+        let transcriptions: [SFTranscription] = (0..<transcriptionsLength).map { _ in
+            return TranscriptionMock(formattedString: String.randomString)
+        }
+        let result = SpeechRecognitionResultMock(transcriptions: transcriptions)
+        
+        let goodIndex = Int.random(in: 0..<transcriptionsLength)
+        let numberFilterReturnValues: [Int] = (0..<transcriptionsLength).map {
+            if $0 == goodIndex {
+                return testCard.answer
+            } else {
+                return -1
+            }
+        }
+        numberFilter.getNumberFromTranscriptionText_returnValues = numberFilterReturnValues
+        
+        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        testObject.delegate = self
+        let _ = testObject.nextCard()
+        
+        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        
+        XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndNoTextIsANumber_TellsDelegateAnswerIsWrong() {
+        let numberFilter = NumberFilterMock()
+        let testCard = Card.testInstance
+        let cardDeck = CardDeck(cards: [testCard])
+        
+        let transcriptionsLength: Int = Int.random(in: 10...20)
+        let transcriptions: [SFTranscription] = (0..<transcriptionsLength).map { _ in
+            return TranscriptionMock(formattedString: String.randomString)
+        }
+        let result = SpeechRecognitionResultMock(transcriptions: transcriptions)
+        
+        let numberFilterReturnValues: [Int] = (0..<transcriptionsLength).map { _ in return -1 }
+        numberFilter.getNumberFromTranscriptionText_returnValues = numberFilterReturnValues
+        
+        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        testObject.delegate = self
+        let _ = testObject.nextCard()
+        
+        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        
+        XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndTextIsIncorrectNumber_TellsDelegateAnswerIsWrong() {
         let numberFilter = NumberFilterMock()
         let testCard = Card.testInstance
         let cardDeck = CardDeck(cards: [testCard])
@@ -127,7 +181,8 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         
         let _ = testObject.nextCard()
         
-        numberFilter.getNumberFromTranscriptionText_returnValue = testCard.answer + Int.random(in: 1...10)
+        let wrongAnswer = testCard.answer + Int.random(in: 1...10)
+        numberFilter.getNumberFromTranscriptionText_returnValues = [wrongAnswer]
         testObject.numberRecognizerEvent_receivedFinalResult(result: result)
         
         XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
@@ -146,6 +201,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 0)
     }
+    
     var cardModelEvent_errorListeningForAnswer_counter = 0
     var cardModelEvent_errorListeningForAnswer_paramError: Error?
     func cardModelEvent_errorListeningForAnswer(error: Error) {
@@ -190,11 +246,11 @@ class NumberRecognizerMock: NumberRecognizer {
 class NumberFilterMock: NumberFilter {
     var getNumberFromTranscriptionText_counter = 0
     var getNumberFromTranscriptionText_paramText: String?
-    var getNumberFromTranscriptionText_returnValue = -1
+    var getNumberFromTranscriptionText_returnValues: [Int] = []
     override func getNumberFromTranscriptionText(_ text: String) -> Int {
         getNumberFromTranscriptionText_counter += 1
         getNumberFromTranscriptionText_paramText = text
-        return getNumberFromTranscriptionText_returnValue
+        return getNumberFromTranscriptionText_returnValues.removeFirst()
     }
 }
 
@@ -213,6 +269,10 @@ class SpeechRecognitionResultMock: SFSpeechRecognitionResult {
     
     override var bestTranscription: SFTranscription {
         return transcriptionsReturn[0]
+    }
+    
+    override var transcriptions: [SFTranscription] {
+        return transcriptionsReturn
     }
 }
 
