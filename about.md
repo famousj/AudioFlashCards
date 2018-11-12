@@ -37,17 +37,17 @@ So, now to get this thing written!  Below are my notes as I was writing this.
 
 - So, now we have a card.  Next, hide the answer.  Wire up some events and reveal the answer if you tap the card.  Then tapping again will get the next card.
 
-Now we need a whole deck of cards, instead of our one generic card.
+  Now we need a whole deck of cards, instead of our one generic card.
 
 - Done.  Actually, this was a bit easier than I'd anticipated, which is good, since I think the audio will be harder than anticipated.
 
-In terms of MVP, this is it.  Now onto speech recognition...
+  In terms of MVP, this is it.  Now onto speech recognition...
 
 - As I'm digging into the speech recognition, you have to grant permission to listen in. (Sensible enough from a privacy standpoint)  Which means that if the user rejects the request for speech recognition, I need to do something.  Either disable the app until the user fixes it or have some kind of manual answer checking.
 
 - Also, speech recognition exists in the realm of engineering, not math.  The phone listens to the user and basically makes a guess about what is being said.  You don't get anything definitive, you just have to decide "yeah, somebody said the right answer".
 
-Apple supports this approach.  You can get a transcription, or you can get a "hypothesis", which will give you a level of confidence.
+  Apple supports this approach.  You can get a transcription, or you can get a "hypothesis", which will give you a level of confidence.
 
 - For a first pass, I will give a try for the regular transcription, and display the recognition results to the screen.  This might work with a bit of tinkering (e.g. if Apple thinks someone said "mine", it's probably 9.)
 
@@ -61,7 +61,7 @@ Apple supports this approach.  You can get a transcription, or you can get a "hy
 
 - The speech recognition is in good shape.  I have a few common ways that iOS will misunderstand me.  (One common way is to assume I'm saying "sex" instead of "six".  I didn't add that as a near-homonym, but I don't want to add that as a single commit.  So I think I'll just leave it like that for now.)
 
-The last pass will be to dig through the words that iOS thinks it heard and keep going until I find one that is actually a number.  This will fix the above-mentioned six/sex issue, since those are always either #1 or #2 on the list of options.
+  The last pass will be to dig through the words that iOS thinks it heard and keep going until I find one that is actually a number.  This will fix the above-mentioned six/sex issue, since those are always either #1 or #2 on the list of options.
 
 - Hand-rolling mocks for the speech recognition classes was a bit of a pain, and it's making me not want to finish that piece.  But I should soldier on.
 
