@@ -32,6 +32,7 @@ extension CardPresenter: CardViewDelegate {
     }
     
     func cardViewEvent_gesturedDoneWithCard() {
+        view.renderInstructionsHidden(isHidden: true)
         showNextCard()
     }
 }

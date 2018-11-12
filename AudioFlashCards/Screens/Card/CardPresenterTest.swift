@@ -42,6 +42,18 @@ class CardPresenterTest: XCTestCase, CardPresenterDelegate {
         XCTAssertEqual(view.renderCard_paramCard, card)
     }
     
+    func test_WhenViewGesturedDoneWithCard_ThenRenderViewWithInstructionsHidden() {
+        let view = CardViewMock()
+        
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: view)
+                
+        testObject.cardViewEvent_gesturedDoneWithCard()
+        
+        XCTAssertEqual(view.renderInstructionsHidden_counter, 1)
+        XCTAssertEqual(view.renderInstructionsHidden_paramIsHidden, true)
+    }
+
+    
     func test_WhenViewGesturedDoneWithCard_AndNextCardIsNil_ThenDoNotRenderView() {
         let view = CardViewMock()
         let model = CardModelMock()
@@ -133,6 +145,13 @@ class CardViewMock: CardView {
     override func renderRecognitionText(text: String) {
         renderRecognitionText_counter += 1
         renderRecognitionText_paramText = text
+    }
+    
+    var renderInstructionsHidden_counter = 0
+    var renderInstructionsHidden_paramIsHidden: Bool?
+    override func renderInstructionsHidden(isHidden: Bool) {
+        renderInstructionsHidden_counter += 1
+        renderInstructionsHidden_paramIsHidden = isHidden
     }
 }
 

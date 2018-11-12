@@ -11,7 +11,11 @@ class CardView: UIView {
     let operationLabel = UILabel()
     let barView = UIView()
     let answerLabel = UILabel()
+    let instructionsLabel = UILabel()
     let speechRecognitionLabel = UILabel()
+    
+    let instructionsText_unanswered = "Just say the answer!"
+    let instructionsText_answered = "Tap anywhere to continue"
     
     weak var delegate: CardViewDelegate?
     
@@ -41,6 +45,7 @@ class CardView: UIView {
         answerLabel.text = String(card.answer)
         answerLabel.isHidden = true
         speechRecognitionLabel.text = ""
+        instructionsLabel.text = instructionsText_unanswered
     }
     
     func renderAnswerShown(answerIsCorrect: Bool) {
@@ -49,8 +54,13 @@ class CardView: UIView {
         } else {
             answerLabel.textColor = .red
         }
-        
         answerLabel.isHidden = false
+        
+        instructionsLabel.text = instructionsText_answered
+    }
+    
+    func renderInstructionsHidden(isHidden: Bool) {
+        instructionsLabel.isHidden = isHidden
     }
     
     func renderRecognitionText(text: String) {
@@ -72,18 +82,18 @@ private extension CardView {
         
         backgroundColor = .white
 
-        setupLabel(num1Label)
+        setupLabel(num1Label, font: Fonts.numberFont)
         num1Label.textAlignment = .right
         addSubview(num1Label)
         constraints.append(contentsOf: createHorizontalAnchorConstraints(num1Label, constant: numberMargin))
         constraints.append(num1Label.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
 
-        setupLabel(num2Label)
+        setupLabel(num2Label, font: Fonts.numberFont)
         addSubview(num2Label)
         constraints.append(createRightAnchorConstraint(num2Label, superview: self, constant: numberMargin))
         constraints.append(constrainTopToBottom(bottomView: num2Label, topView: num1Label))
 
-        setupLabel(operationLabel)
+        setupLabel(operationLabel, font: Fonts.numberFont)
         addSubview(operationLabel)
         constraints.append(operationLabel.rightAnchor.constraint(equalTo: num2Label.leftAnchor, constant: -horizontalMargin))
         constraints.append(operationLabel.bottomAnchor.constraint(equalTo:num2Label.bottomAnchor))
@@ -96,13 +106,20 @@ private extension CardView {
         constraints.append(contentsOf: createHorizontalAnchorConstraints(barView, constant: horizontalMargin))
         constraints.append(constrainTopToBottom(bottomView: barView, topView: num2Label))
     
-        setupLabel(answerLabel)
+        setupLabel(answerLabel, font: Fonts.numberFont)
         answerLabel.textAlignment = .right
         addSubview(answerLabel)
         constraints.append(contentsOf: createHorizontalAnchorConstraints(answerLabel, constant: numberMargin))
         constraints.append(constrainTopToBottom(bottomView: answerLabel, topView: barView))
         
-        setupLabel(speechRecognitionLabel, fontSize: 12)
+        setupLabel(instructionsLabel, font: Fonts.instructionFont)
+        instructionsLabel.numberOfLines = 0
+        instructionsLabel.textAlignment = .center
+        addSubview(instructionsLabel)
+        constraints.append(contentsOf: createHorizontalAnchorConstraints(instructionsLabel, constant: horizontalMargin))
+        constraints.append(constrainTopToBottom(bottomView: instructionsLabel, topView: answerLabel))
+        
+        setupLabel(speechRecognitionLabel, font: Fonts.speechRecognitionFont)
         speechRecognitionLabel.backgroundColor = .yellow
         speechRecognitionLabel.numberOfLines = 0
         addSubview(speechRecognitionLabel)
@@ -111,8 +128,8 @@ private extension CardView {
         constraints.forEach{ $0.isActive = true }
     }
     
-    func setupLabel(_ label: UILabel, fontSize: CGFloat = 100) {
-        label.font = UIFont.systemFont(ofSize: fontSize)
+    func setupLabel(_ label: UILabel, font: UIFont) {
+        label.font = font
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
