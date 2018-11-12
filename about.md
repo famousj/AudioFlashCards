@@ -2,41 +2,52 @@
 
 ## The Idea
 
+I have numerous boys who are all good at math from a reasoning standpoint and pretty slow from a "facts" standpoint.  If it's a problem like "Francis has four fewer fruits than Teddy who has and half his fruits are red..." they're great.  If it's a question like "What is 6+8?" they get the answer eventually, after looking at their fingers.
+
+As it happens, I was also really slow at basic arithmetic.  This eventually became a problem, like in college when I had to do matrix algebra, which might entail literally 700 basic arithmetic problems.
+
+I am of the opinion that there's no substitute for drilling and memorizing.  Flash cards are ideal for this, but they get lost or torn or smeared with peanut butter.  And for the littler kids, they're labor-intensive.
+
+So my idea is an iOS app for basic arithmetic flash cards, with a speech recognition component, so my phone can verify if the cards are right or wrong, and also keep track of which problems the kids struggle with, to provide some focus on those problems.
+
 ## Value and MVP
 
-First, consider delivering value.  Here's how I see things:
+With that in mind, let's think about how we an app might deliver value:
 
-- A randomized set of flash cards.  Just like the paper cards only on my phone
+- A randomized set of flash cards.  Just like the paper cards, only on my phone.
 - Flash cards that listen for an answer and let you know if it's right or wrong
   (Alternately, this might be "scaffolded" with some buttons for manual entry)
+- [Spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition), or some method of revisiting cards that the kids struggle with (like "8+7") more often than the easy cards (like "2+2").
 - Profiles: keep track of settings for families with multiple kids
 - Other operations, subtraction, multiplication, etc.
 
-Now that I laid it all out, my MVP is a set of cards showing numbers 0-9 for one number and 0-9 for the other number.  No audio.  No way of knowing if the answers were right.
+Looking at this list, I would say an MVP is an app with a set of addition cards showing numbers 0-9 for one number and 0-9 for the other number.  No audio.  No way of knowing if the person got the answer right.
 
-I think a "Minimum Lovable Product" would have speech recognition.  Put the wrong cards at the back, and just go through all of them until you get them all right.
+I think a "Minimum Lovable Product" would have speech recognition.
 
-Space repetition (or SRS) after that.  If I'd want to go through the trouble of putting something on the App Store, I would want it to have this.
+Then some kind of statistics and spaced repetition (or SRS) after that.  It would need this extra piece before I went through the trouble of putting something on the app store.
 
 ##  Brass Tacks
 
-So, now to get this thing written!
+So, now to get this thing written!  Below are my notes as I was writing this.
 
-- Before we consider SRS or speech, we need one flash card.  Then we have a deck of flash cards.
+- Before we consider anything else, we need one flash card.  Then we have a deck of flash cards.
 
-- First create stubs for a model-view-presenter.  Then write the view.  (Note: I always forget how long it takes to go from zero to anything, especially where the view is concerned.)
+- Created stubs for a model-view-presenter.  Then wrote the view.  (Note: I always forget how long it takes to go from zero to anything, especially where the view is concerned.)
 
 - So, now we have a card.  Next, hide the answer.  Wire up some events and reveal the answer if you tap the card.  Then tapping again will get the next card.
 
-- Now we need a whole deck of cards, instead of our one generic card.
+Now we need a whole deck of cards, instead of our one generic card.
 
 - Done.  Actually, this was a bit easier than I'd anticipated, which is good, since I think the audio will be harder than anticipated.
+
+In terms of MVP, this is it.  Now onto speech recognition...
 
 - As I'm digging into the speech recognition, you have to grant permission to listen in. (Sensible enough from a privacy standpoint)  Which means that if the user rejects the request for speech recognition, I need to do something.  Either disable the app until the user fixes it or have some kind of manual answer checking.
 
 - Also, speech recognition exists in the realm of engineering, not math.  The phone listens to the user and basically makes a guess about what is being said.  You don't get anything definitive, you just have to decide "yeah, somebody said the right answer".
 
-Apple recognizes this.  You can get a transcription, or you can get a "hypothesis", which will give you a level of confidence.
+Apple supports this approach.  You can get a transcription, or you can get a "hypothesis", which will give you a level of confidence.
 
 - For a first pass, I will give a try for the regular transcription, and display the recognition results to the screen.  This might work with a bit of tinkering (e.g. if Apple thinks someone said "mine", it's probably 9.)
 
@@ -52,9 +63,8 @@ Apple recognizes this.  You can get a transcription, or you can get a "hypothesi
 
 The last pass will be to dig through the words that iOS thinks it heard and keep going until I find one that is actually a number.  This will fix the above-mentioned six/sex issue, since those are always either #1 or #2 on the list of options.
 
-- Hand-rolling mocks for the speech recognition classes was a bit of a pain, and it's making me not want to finish that piece.  Since I'd also like it to be tested, and making an array of mock speech transcriptions is going to be a bit messy.
+- Hand-rolling mocks for the speech recognition classes was a bit of a pain, and it's making me not want to finish that piece.  But I should soldier on.
 
-- And it's done!  I ran through all 100 or so cards and got correct speech recognized for all 100 of them.  The only incorrect one was "1+0" which I said (and iOS recognized as) "zero".
+- And it's done!  I ran through all 100 cards and got correct speech recognized for all 100 of them.  The only incorrect one was "1+0" which I said (and iOS recognized as) "zero".
 
-
-
+- Some UI cleanup and added instructions.  I'm trying to figure out how to get the numbers to size themselves correctly without doing anything too clever in the View code.
