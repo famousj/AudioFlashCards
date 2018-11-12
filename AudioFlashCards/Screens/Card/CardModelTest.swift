@@ -1,4 +1,5 @@
 import XCTest
+import Speech
 @testable import AudioFlashCards
 
 class CardModelTest: XCTestCase, CardModelDelegate {
@@ -70,17 +71,6 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertTrue(cardModelEvent_answerUpdated_paramText == testText)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilter() {
-        let numberFilter = NumberFilterMock()
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
-        
-        let testText = String(Int.random(in: 0...20))
-        testObject.numberRecognizerEvent_textRecognized(text: testText)
-        
-        XCTAssertEqual(numberFilter.getNumberFromTranscriptionText_counter, 1)
-        XCTAssertTrue(numberFilter.getNumberFromTranscriptionText_paramText == testText)
-    }
-    
     func test_WhenReceiveListenerTextRecognizedEvent_StopsListening() {
         let numberRecognizer = NumberRecognizerMock()
         let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
@@ -91,18 +81,35 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertEqual(numberRecognizer.stopListening_counter, 1)
     }
     
+    func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilterWithBestTransactionText() {
+        let numberFilter = NumberFilterMock()
+        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        
+        let testText = String(Int.random(in: 0...20))
+        let transcription = TranscriptionMock(formattedString: testText)
+        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
+        
+        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        
+        XCTAssertEqual(numberFilter.getNumberFromTranscriptionText_counter, 1)
+        XCTAssertTrue(numberFilter.getNumberFromTranscriptionText_paramText == testText)
+    }
+    
     func test_WhenReceiveListenerTextRecognizedEvent_AndTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
         let numberFilter = NumberFilterMock()
         let testCard = Card.testInstance
         let cardDeck = CardDeck(cards: [testCard])
         
+        let transcription = TranscriptionMock(formattedString: "")
+        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
+
         let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         testObject.delegate = self
         
         let _ = testObject.nextCard()
         
         numberFilter.getNumberFromTranscriptionText_returnValue = testCard.answer
-        testObject.numberRecognizerEvent_textRecognized(text: String("correct answer"))
+        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
     }
@@ -112,13 +119,16 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         let testCard = Card.testInstance
         let cardDeck = CardDeck(cards: [testCard])
         
+        let transcription = TranscriptionMock(formattedString: "")
+        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
+        
         let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         testObject.delegate = self
         
         let _ = testObject.nextCard()
         
         numberFilter.getNumberFromTranscriptionText_returnValue = testCard.answer + Int.random(in: 1...10)
-        testObject.numberRecognizerEvent_textRecognized(text: String("totally wrong answer"))
+        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
         
         XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
     }
@@ -185,5 +195,39 @@ class NumberFilterMock: NumberFilter {
         getNumberFromTranscriptionText_counter += 1
         getNumberFromTranscriptionText_paramText = text
         return getNumberFromTranscriptionText_returnValue
+    }
+}
+
+class SpeechRecognitionResultMock: SFSpeechRecognitionResult {
+    
+    let transcriptionsReturn: [SFTranscription]
+    init(transcriptions: [SFTranscription]) {
+        transcriptionsReturn = transcriptions
+
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var bestTranscription: SFTranscription {
+        return transcriptionsReturn[0]
+    }
+}
+
+class TranscriptionMock: SFTranscription {
+    let formattedStringReturn: String
+    init(formattedString: String) {
+        formattedStringReturn = formattedString
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var formattedString: String {
+        return formattedStringReturn
     }
 }

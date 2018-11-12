@@ -40,6 +40,7 @@ class CardView: UIView {
         barView.isHidden = false
         answerLabel.text = String(card.answer)
         answerLabel.isHidden = true
+        speechRecognitionLabel.text = ""
     }
     
     func renderAnswerShown(answerIsCorrect: Bool) {

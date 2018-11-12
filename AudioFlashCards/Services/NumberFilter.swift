@@ -28,6 +28,10 @@ class NumberFilter {
                        nineWords]
     }
     
+    func getNumberFromRecognitionResults(_ results: SFSpeechRecognitionResult) -> Int {
+        return -1
+    }
+    
     func getNumberFromTranscriptionText(_ text: String) -> Int {
         if let number = Int(text) {
             return number

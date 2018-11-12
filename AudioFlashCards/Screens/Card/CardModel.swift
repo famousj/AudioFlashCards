@@ -54,9 +54,12 @@ extension CardModel: NumberRecognizerDelegate {
     func numberRecognizerEvent_textRecognized(text: String) {
         delegate?.cardModelEvent_textRecognized(text: text)
         
-        let textNumber = numberFilter.getNumberFromTranscriptionText(text)
-        
         numberRecognizer.stopListening()
+    }
+    
+    func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult) {
+        let text = result.bestTranscription.formattedString
+        let textNumber = numberFilter.getNumberFromTranscriptionText(text)
         
         guard let answer = currentCard?.answer else { return }
         

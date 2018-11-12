@@ -3,6 +3,7 @@ import Speech
 
 protocol NumberRecognizerDelegate: class {
     func numberRecognizerEvent_textRecognized(text: String)
+    func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult)
 }
 
 // Code here is lifted liberally from Apple's Spoken Word demo
@@ -46,11 +47,8 @@ class NumberRecognizer: NSObject {
         // Create a recognition task for the speech recognition session.
         // Keep a reference to the task so that it can be canceled.
          recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: handleRecognitionResult)
-//        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, delegate: self) // resultHandler: handleRecognitionResult)
         
         // Configure the microphone input.
-        // TODO: Do we need this?
-//        inputNode!.removeTap(onBus: 0)
         let recordingFormat = inputNode!.outputFormat(forBus: 0)
         inputNode!.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             self.recognitionRequest?.append(buffer)
@@ -63,18 +61,21 @@ class NumberRecognizer: NSObject {
     
     func stopListening() {
         audioEngine.stop()
+        inputNode!.removeTap(onBus: 0)
         recognitionRequest?.endAudio()
     }
     
-    func handleRecognitionResult(result: SFSpeechRecognitionResult?, error: Error?) {
+    private func handleRecognitionResult(result: SFSpeechRecognitionResult?, error: Error?) {
         var isFinal = false
         
         if let result = result {
             let text = result.transcriptions.map { $0.formattedString }.joined(separator: "\n")
-
             delegate?.numberRecognizerEvent_textRecognized(text: text)
             
             isFinal = result.isFinal
+            if (isFinal) {
+                delegate?.numberRecognizerEvent_receivedFinalResult(result: result)
+            }
         }
         
         if error != nil || isFinal {
