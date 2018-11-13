@@ -2,7 +2,7 @@
 
 ## The Idea
 
-I have numerous boys who are all good at math from a reasoning standpoint and pretty slow from a "facts" standpoint.  If it's a problem like "Francis has four fewer fruits than Teddy who has and half his fruits are red..." they're great.  If it's a question like "What is 6+8?" they get the answer eventually, after looking at their fingers.
+I have numerous boys who are all good at math from a reasoning standpoint and pretty slow from a "facts" standpoint.  If it's a problem like "Francis has four fewer fruits than Teddy, and half his fruits are red..." they're great.  If it's a question like "What is 6+8?" they get the answer eventually, after looking at their fingers.
 
 As it happens, I was also really slow at basic arithmetic.  This eventually became a problem, like in college when I had to do matrix algebra, which might entail literally 700 basic arithmetic problems.
 
