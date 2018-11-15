@@ -26,7 +26,6 @@ class NumberRecognizer: NSObject {
     }
     
     func startListening() throws {
-                
         // Cancel the previous task if it's running.
         if let recognitionTask = recognitionTask {
             stopListening()

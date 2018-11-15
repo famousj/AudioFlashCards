@@ -28,6 +28,7 @@
 		D8EA8C612195392D00B1D9D7 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C602195392D00B1D9D7 /* CardView.swift */; };
 		D8EA8C632195394B00B1D9D7 /* CardPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C622195394B00B1D9D7 /* CardPresenter.swift */; };
 		D8EA8C652195395400B1D9D7 /* CardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EA8C642195395400B1D9D7 /* CardModel.swift */; };
+		D8EF8A35219B8ACC000CDC64 /* DeviceSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EF8A34219B8ACC000CDC64 /* DeviceSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		D8EA8C602195392D00B1D9D7 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		D8EA8C622195394B00B1D9D7 /* CardPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPresenter.swift; sourceTree = "<group>"; };
 		D8EA8C642195395400B1D9D7 /* CardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModel.swift; sourceTree = "<group>"; };
+		D8EF8A34219B8ACC000CDC64 /* DeviceSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 			children = (
 				D8E7CA9521991CFF00E6A0D9 /* TestExtensions.swift */,
 				D8E7CA972199C85C00E6A0D9 /* Styles.swift */,
+				D8EF8A34219B8ACC000CDC64 /* DeviceSize.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			files = (
 				D8E7CA982199C85C00E6A0D9 /* Styles.swift in Sources */,
 				D8EA8C3C2194AAF700B1D9D7 /* AppDelegate.swift in Sources */,
+				D8EF8A35219B8ACC000CDC64 /* DeviceSize.swift in Sources */,
 				D828F7F92196186800D5FBFD /* Card.swift in Sources */,
 				D8E7CA862197384600E6A0D9 /* CardDeck.swift in Sources */,
 				D8E7CA7E2196931200E6A0D9 /* AdditionCard.swift in Sources */,

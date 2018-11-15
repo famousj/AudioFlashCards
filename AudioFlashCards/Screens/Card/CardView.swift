@@ -19,6 +19,7 @@ class CardView: UIView {
     
     let horizontalMargin: CGFloat = 32
     
+    var problemContainerView: UIView!
     
     weak var delegate: CardViewDelegate?
     
@@ -63,11 +64,18 @@ class CardView: UIView {
     }
     
     func renderInstructionsHidden(isHidden: Bool) {
-        instructionsLabel.isHidden = isHidden
+        if isHidden {
+            instructionsLabel.isHidden = isHidden
+            
+        } else {
+            addSubview(instructionsLabel)
+        }
     }
     
     func renderRecognitionText(text: String) {
         speechRecognitionLabel.text = text
+        
+        problemContainerView.sizeToFit()
     }
 }
 
@@ -81,37 +89,32 @@ private extension CardView {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         addGestureRecognizer(tapRecognizer)
         
-        backgroundColor = .blue
+        backgroundColor = .white
         
-        let problemContainerView = problemView
+        self.problemContainerView = problemView
         addSubview(problemContainerView)
         problemContainerView.translatesAutoresizingMaskIntoConstraints = false
         constraints.append(problemContainerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
         constraints += createHorizontalAnchorConstraints(problemContainerView, constant: horizontalMargin)
         
-        
-        
-        
         setupLabel(instructionsLabel, font: Fonts.instructionFont)
-        instructionsLabel.numberOfLines = 0
+        instructionsLabel.numberOfLines = 1
         instructionsLabel.textAlignment = .center
         addSubview(instructionsLabel)
         constraints.append(contentsOf: createHorizontalAnchorConstraints(instructionsLabel, constant: horizontalMargin))
         
-        let verticalSpacing: CGFloat = 32
-        constraints.append(instructionsLabel.topAnchor.constraint(equalTo: problemContainerView.bottomAnchor, constant: verticalSpacing))
-        constraints.append(constrainTopToBottom(bottomView: instructionsLabel, topView: problemContainerView))
+        constraints += [instructionsLabel.heightAnchor.constraint(equalToConstant: Fonts.instructionFont.pointSize),
+                        constrainTopToBottom(bottomView: instructionsLabel, topView: problemContainerView)]
         
-        
-        constraints.append(instructionsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin))
-        
-        //
-        //        setupLabel(speechRecognitionLabel, font: Fonts.speechRecognitionFont)
-        //        speechRecognitionLabel.backgroundColor = .yellow
-        //        speechRecognitionLabel.numberOfLines = 0
-        //        addSubview(speechRecognitionLabel)
-        //        constraints.append(contentsOf: createHorizontalAnchorConstraints(speechRecognitionLabel, constant: horizontalMargin))
-        //        constraints.append(speechRecognitionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin))
+        setupLabel(speechRecognitionLabel, font: Fonts.speechRecognitionFont)
+        speechRecognitionLabel.backgroundColor = .yellow
+        speechRecognitionLabel.numberOfLines = 0
+        addSubview(speechRecognitionLabel)
+        constraints += createHorizontalAnchorConstraints(speechRecognitionLabel, constant: horizontalMargin)
+        constraints += [constrainTopToBottom(bottomView: speechRecognitionLabel, topView: instructionsLabel),
+                        speechRecognitionLabel.heightAnchor.constraint(equalToConstant: 60),
+                        speechRecognitionLabel.bottomAnchor.constraint(equalTo: bottomAnchor,
+                                                                       constant: -verticalMargin)]
         
         constraints.forEach{ $0.isActive = true }
     }
@@ -121,44 +124,51 @@ private extension CardView {
         containerView.backgroundColor = .white
         
         var constraints: [NSLayoutConstraint] = []
+
+        let multiplier: CGFloat = 1/4
+
+        let fontSize: CGFloat = DeviceSize.value(small: 75, medium: 85, large: 125, extraLarge: 175)
+        let font = Fonts.numberFont.withSize(fontSize)
         
-        let multiplier: CGFloat = 1/5
-        
-        setupLabel(num1Label, font: Fonts.numberFont)
-        num1Label.backgroundColor = .orange
-        num1Label.textAlignment = .center
+        setupLabel(num1Label, font: font)
         containerView.addSubview(num1Label)
         constraints += [num1Label.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-                        bottomConstraint(item: num1Label, toItem: containerView, multiplier: multiplier*1)]
+                        num1Label.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: multiplier),
+                        num1Label.topAnchor.constraint(equalTo: containerView.topAnchor)]
         
-        setupLabel(num2Label, font: Fonts.numberFont)
-        num2Label.backgroundColor = .brown
+        setupLabel(num2Label, font: font)
         containerView.addSubview(num2Label)
         constraints += [num2Label.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-                        bottomConstraint(item: num2Label, toItem: containerView, multiplier: multiplier*2)]
-        
-        setupLabel(operationLabel, font: Fonts.numberFont)
+                        num2Label.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: multiplier),
+                        num2Label.topAnchor.constraint(equalTo: num1Label.bottomAnchor, constant: verticalSpacing)]
+
+        setupLabel(operationLabel, font: font)
         containerView.addSubview(operationLabel)
         constraints += [operationLabel.centerYAnchor.constraint(equalTo: num2Label.centerYAnchor),
-                        operationLabel.rightAnchor.constraint(equalTo: num2Label.leftAnchor, constant: -horizontalMargin)]
-        
+                        operationLabel.rightAnchor.constraint(equalTo: num2Label.leftAnchor,
+                                                              constant: -horizontalMargin)]
+
         barView.backgroundColor = .black
         barView.isHidden = true
         containerView.addSubview(barView)
         barView.translatesAutoresizingMaskIntoConstraints = false
-        constraints += createHorizontalAnchorConstraints(barView, constant: 0)
+        constraints += createHorizontalAnchorConstraints(barView, constant: horizontalMargin)
         constraints += [barView.heightAnchor.constraint(equalToConstant: 15),
-                        bottomConstraint(item: barView, toItem: containerView, multiplier: multiplier*3)]
+                        barView.topAnchor.constraint(equalTo: num2Label.bottomAnchor, constant: verticalSpacing)]
 
-        setupLabel(answerLabel, font: Fonts.numberFont)
-        answerLabel.backgroundColor = .brown
+        setupLabel(answerLabel, font: font)
         containerView.addSubview(answerLabel)
         constraints += [answerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-                        bottomConstraint(item: answerLabel, toItem: containerView, multiplier: multiplier*4)]
+                        answerLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: multiplier),
+                        answerLabel.topAnchor.constraint(equalTo: barView.bottomAnchor, constant: verticalSpacing)]
         
         constraints.forEach{ $0.isActive = true }
         
         return containerView
+    }
+    
+    var verticalSpacing: CGFloat {
+        return DeviceSize.value(small: 20, medium: 28, large: 32, extraLarge: 64)
     }
     
     func bottomConstraint(item: UIView, toItem: UIView, multiplier: CGFloat) -> NSLayoutConstraint {
@@ -188,7 +198,6 @@ private extension CardView {
     }
     
     func constrainTopToBottom(bottomView: UIView, topView: UIView) -> NSLayoutConstraint {
-        let verticalSpacing: CGFloat = 32
         return bottomView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: verticalSpacing)
     }
 }
