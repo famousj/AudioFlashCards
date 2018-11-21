@@ -95,23 +95,27 @@ private extension CardView {
         addSubview(problemContainerView)
         problemContainerView.translatesAutoresizingMaskIntoConstraints = false
         constraints.append(problemContainerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
-        constraints += createHorizontalAnchorConstraints(problemContainerView, constant: horizontalMargin)
+        constraints += Constraints.horizontalAnchorConstraints(problemContainerView, constant: horizontalMargin)
         
         setupLabel(instructionsLabel, font: Fonts.instructionFont)
         instructionsLabel.numberOfLines = 1
         instructionsLabel.textAlignment = .center
         addSubview(instructionsLabel)
-        constraints.append(contentsOf: createHorizontalAnchorConstraints(instructionsLabel, constant: horizontalMargin))
+        constraints += Constraints.horizontalAnchorConstraints(instructionsLabel, constant: horizontalMargin)
         
         constraints += [instructionsLabel.heightAnchor.constraint(equalToConstant: Fonts.instructionFont.pointSize),
-                        constrainTopToBottom(bottomView: instructionsLabel, topView: problemContainerView)]
+                        Constraints.constrainTopToBottom(bottomView: instructionsLabel,
+                                                         topView: problemContainerView,
+                                                         verticalSpacing: verticalSpacing)]
         
         setupLabel(speechRecognitionLabel, font: Fonts.speechRecognitionFont)
         speechRecognitionLabel.backgroundColor = .yellow
         speechRecognitionLabel.numberOfLines = 0
         addSubview(speechRecognitionLabel)
-        constraints += createHorizontalAnchorConstraints(speechRecognitionLabel, constant: horizontalMargin)
-        constraints += [constrainTopToBottom(bottomView: speechRecognitionLabel, topView: instructionsLabel),
+        constraints += Constraints.horizontalAnchorConstraints(speechRecognitionLabel, constant: horizontalMargin)
+        constraints += [Constraints.constrainTopToBottom(bottomView: speechRecognitionLabel,
+                                                         topView: instructionsLabel,
+                                                         verticalSpacing: verticalSpacing),
                         speechRecognitionLabel.heightAnchor.constraint(equalToConstant: 60),
                         speechRecognitionLabel.bottomAnchor.constraint(equalTo: bottomAnchor,
                                                                        constant: -verticalMargin)]
@@ -152,7 +156,7 @@ private extension CardView {
         barView.isHidden = true
         containerView.addSubview(barView)
         barView.translatesAutoresizingMaskIntoConstraints = false
-        constraints += createHorizontalAnchorConstraints(barView, constant: horizontalMargin)
+        constraints += Constraints.horizontalAnchorConstraints(barView, constant: horizontalMargin)
         constraints += [barView.heightAnchor.constraint(equalToConstant: 15),
                         barView.topAnchor.constraint(equalTo: num2Label.bottomAnchor, constant: verticalSpacing)]
 
@@ -181,23 +185,5 @@ private extension CardView {
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-    func createHorizontalAnchorConstraints(_ view: UIView, constant: CGFloat) -> [NSLayoutConstraint] {
-        guard let superview = view.superview else { return [] }
-        
-        return [createLeftAnchorConstraint(view, superview: superview, constant: constant),
-                createRightAnchorConstraint(view, superview: superview, constant: constant) ]
-    }
-    
-    func createLeftAnchorConstraint(_ view: UIView, superview: UIView, constant: CGFloat) -> NSLayoutConstraint {
-        return view.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: constant)
-    }
-    
-    func createRightAnchorConstraint(_ view: UIView, superview: UIView, constant: CGFloat) -> NSLayoutConstraint {
-        return view.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: -constant)
-    }
-    
-    func constrainTopToBottom(bottomView: UIView, topView: UIView) -> NSLayoutConstraint {
-        return bottomView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: verticalSpacing)
-    }
+
 }

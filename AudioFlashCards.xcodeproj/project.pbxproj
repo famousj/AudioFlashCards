@@ -7,7 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D81E7AC9219F0977008D5212 /* StatsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7AC8219F0977008D5212 /* StatsController.swift */; };
+		D81E7ACB219F0997008D5212 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7ACA219F0997008D5212 /* StatsView.swift */; };
+		D81E7ACD219F1AEB008D5212 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7ACC219F1AEB008D5212 /* Constraints.swift */; };
 		D828F7F92196186800D5FBFD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828F7F82196186800D5FBFD /* Card.swift */; };
+		D89A519721A2FB33009A3ECC /* StatsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A519621A2FB33009A3ECC /* StatsPresenter.swift */; };
+		D89A519921A2FB87009A3ECC /* StatsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A519821A2FB87009A3ECC /* StatsModel.swift */; };
+		D89A519B21A2FC26009A3ECC /* StatsPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A519A21A2FC26009A3ECC /* StatsPresenterTest.swift */; };
+		D89A519D21A3098C009A3ECC /* StatsControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A519C21A3098C009A3ECC /* StatsControllerTest.swift */; };
+		D89A519F21A36859009A3ECC /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A519E21A36859009A3ECC /* DataStore.swift */; };
+		D89A51A121A3695D009A3ECC /* DataStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A51A021A3695D009A3ECC /* DataStoreTest.swift */; };
+		D89A51A321A369C1009A3ECC /* StatsModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89A51A221A369C1009A3ECC /* StatsModelTest.swift */; };
 		D8E7CA7C2196930600E6A0D9 /* CardModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA7B2196930600E6A0D9 /* CardModelTest.swift */; };
 		D8E7CA7E2196931200E6A0D9 /* AdditionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA7D2196931200E6A0D9 /* AdditionCard.swift */; };
 		D8E7CA802196931C00E6A0D9 /* AdditionCardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA7F2196931C00E6A0D9 /* AdditionCardTest.swift */; };
@@ -42,7 +52,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D81E7AC8219F0977008D5212 /* StatsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsController.swift; sourceTree = "<group>"; };
+		D81E7ACA219F0997008D5212 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		D81E7ACC219F1AEB008D5212 /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		D828F7F82196186800D5FBFD /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		D89A519621A2FB33009A3ECC /* StatsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsPresenter.swift; sourceTree = "<group>"; };
+		D89A519821A2FB87009A3ECC /* StatsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModel.swift; sourceTree = "<group>"; };
+		D89A519A21A2FC26009A3ECC /* StatsPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsPresenterTest.swift; sourceTree = "<group>"; };
+		D89A519C21A3098C009A3ECC /* StatsControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsControllerTest.swift; sourceTree = "<group>"; };
+		D89A519E21A36859009A3ECC /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		D89A51A021A3695D009A3ECC /* DataStoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreTest.swift; sourceTree = "<group>"; };
+		D89A51A221A369C1009A3ECC /* StatsModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModelTest.swift; sourceTree = "<group>"; };
 		D8E7CA7B2196930600E6A0D9 /* CardModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardModelTest.swift; sourceTree = "<group>"; };
 		D8E7CA7D2196931200E6A0D9 /* AdditionCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionCard.swift; sourceTree = "<group>"; };
 		D8E7CA7F2196931C00E6A0D9 /* AdditionCardTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionCardTest.swift; sourceTree = "<group>"; };
@@ -88,6 +108,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D81E7AC7219F0959008D5212 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				D81E7AC8219F0977008D5212 /* StatsController.swift */,
+				D89A519C21A3098C009A3ECC /* StatsControllerTest.swift */,
+				D81E7ACA219F0997008D5212 /* StatsView.swift */,
+				D89A519621A2FB33009A3ECC /* StatsPresenter.swift */,
+				D89A519A21A2FC26009A3ECC /* StatsPresenterTest.swift */,
+				D89A519821A2FB87009A3ECC /* StatsModel.swift */,
+				D89A51A221A369C1009A3ECC /* StatsModelTest.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
 		D828F7F72196183800D5FBFD /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +131,8 @@
 				D8E7CA832196951B00E6A0D9 /* CardTest.swift */,
 				D8E7CA852197384600E6A0D9 /* CardDeck.swift */,
 				D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */,
+				D89A519E21A36859009A3ECC /* DataStore.swift */,
+				D89A51A021A3695D009A3ECC /* DataStoreTest.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -117,6 +153,7 @@
 				D8E7CA9521991CFF00E6A0D9 /* TestExtensions.swift */,
 				D8E7CA972199C85C00E6A0D9 /* Styles.swift */,
 				D8EF8A34219B8ACC000CDC64 /* DeviceSize.swift */,
+				D81E7ACC219F1AEB008D5212 /* Constraints.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -174,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				D8EA8C5F2195391A00B1D9D7 /* Card */,
+				D81E7AC7219F0959008D5212 /* Stats */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -299,11 +337,17 @@
 				D828F7F92196186800D5FBFD /* Card.swift in Sources */,
 				D8E7CA862197384600E6A0D9 /* CardDeck.swift in Sources */,
 				D8E7CA7E2196931200E6A0D9 /* AdditionCard.swift in Sources */,
+				D89A519721A2FB33009A3ECC /* StatsPresenter.swift in Sources */,
+				D89A519F21A36859009A3ECC /* DataStore.swift in Sources */,
 				D8EA8C612195392D00B1D9D7 /* CardView.swift in Sources */,
+				D81E7ACD219F1AEB008D5212 /* Constraints.swift in Sources */,
 				D8E7CA8D2198720400E6A0D9 /* NumberRecognizer.swift in Sources */,
 				D8EA8C5D219538D800B1D9D7 /* CardController.swift in Sources */,
 				D8EA8C632195394B00B1D9D7 /* CardPresenter.swift in Sources */,
+				D89A519921A2FB87009A3ECC /* StatsModel.swift in Sources */,
 				D8E7CA912198BCFA00E6A0D9 /* NumberFilter.swift in Sources */,
+				D81E7AC9219F0977008D5212 /* StatsController.swift in Sources */,
+				D81E7ACB219F0997008D5212 /* StatsView.swift in Sources */,
 				D8EA8C652195395400B1D9D7 /* CardModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,9 +361,13 @@
 				D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */,
 				D8E7CA7C2196930600E6A0D9 /* CardModelTest.swift in Sources */,
 				D8E7CA802196931C00E6A0D9 /* AdditionCardTest.swift in Sources */,
+				D89A519D21A3098C009A3ECC /* StatsControllerTest.swift in Sources */,
+				D89A51A121A3695D009A3ECC /* DataStoreTest.swift in Sources */,
 				D8E7CA932198C25D00E6A0D9 /* NumberFilterTest.swift in Sources */,
 				D8E7CA842196951B00E6A0D9 /* CardTest.swift in Sources */,
+				D89A519B21A2FC26009A3ECC /* StatsPresenterTest.swift in Sources */,
 				D8E7CA9621991CFF00E6A0D9 /* TestExtensions.swift in Sources */,
+				D89A51A321A369C1009A3ECC /* StatsModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
