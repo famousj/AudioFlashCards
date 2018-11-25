@@ -16,13 +16,11 @@ class StatsModel {
         dataStore.resetStatistics()
     }
     
-    // TODO
     var percentCorrect: Double {
-        return 0.004
+        return dataStore.percentCorrect
     }
     
-    // TODO
-    var averageAnswerTime: Double {
-        return 0.42
+    var averageResponseTime: Double {
+        return dataStore.averageResponseTime
     }
 }

@@ -13,7 +13,7 @@ class StatsPresenter {
         self.statsModel = statsModel
         statsView.delegate = self
         
-        statsView.renderAnswerTime(statsModel.averageAnswerTime)
+        statsView.renderResponseTime(statsModel.averageResponseTime)
         statsView.renderPercentCorrect(statsModel.percentCorrect)
     }
     

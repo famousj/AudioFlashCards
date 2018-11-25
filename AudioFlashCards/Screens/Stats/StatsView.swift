@@ -8,10 +8,10 @@ class StatsView: UIView {
     weak var delegate: StatsViewDelegate?
     
     private let percentCorrectLabel = UILabel()
-    private let answerTimeLabel = UILabel()
+    private let responseTimeLabel = UILabel()
     
     private let percentCorrectLabelTitle = "Percent correct"
-    private let answerTimeLabelTitle = "Avg. Time to Respond"
+    private let responseTimeLabelTitle = "Avg. Time to Respond"
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -32,9 +32,9 @@ class StatsView: UIView {
         percentCorrectLabel.attributedText = statString(title: percentCorrectLabelTitle, stat: pctString)
     }
     
-    func renderAnswerTime(_ answerTime: Double) {
-        let answerTimeString = String(format: "%.2f seconds", answerTime)
-        answerTimeLabel.attributedText = statString(title: answerTimeLabelTitle, stat: answerTimeString)
+    func renderResponseTime(_ responseTime: Double) {
+        let responseTimeString = String(format: "%.2f seconds", responseTime)
+        responseTimeLabel.attributedText = statString(title: responseTimeLabelTitle, stat: responseTimeString)
     }
 }
 
@@ -64,12 +64,12 @@ private extension StatsView {
         constraints += Constraints.horizontalAnchorConstraints(percentCorrectLabel, constant: horizontalMargin)
         constraints.append(Constraints.constrainTopToBottom(bottomView: percentCorrectLabel, topView: titleLabel, verticalSpacing: verticalSpacing))
         
-        answerTimeLabel.attributedText = statString(title: answerTimeLabelTitle, stat: "")
+        responseTimeLabel.attributedText = statString(title: responseTimeLabelTitle, stat: "")
         percentCorrectLabel.textAlignment = .left
-        addSubview(answerTimeLabel)
-        answerTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        constraints += Constraints.horizontalAnchorConstraints(answerTimeLabel, constant: horizontalMargin)
-        constraints.append(Constraints.constrainTopToBottom(bottomView: answerTimeLabel, topView: percentCorrectLabel, verticalSpacing: verticalSpacing))
+        addSubview(responseTimeLabel)
+        responseTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        constraints += Constraints.horizontalAnchorConstraints(responseTimeLabel, constant: horizontalMargin)
+        constraints.append(Constraints.constrainTopToBottom(bottomView: responseTimeLabel, topView: percentCorrectLabel, verticalSpacing: verticalSpacing))
         
         let resetButton = UIButton(frame: .zero)
         resetButton.setTitle("Reset Statistics", for: .normal)
@@ -77,13 +77,11 @@ private extension StatsView {
         resetButton.setTitleColor(Colors.buttonHighlightedColor, for: .highlighted)
         resetButton.addTarget(self, action: #selector(resetButtonPressed), for: .touchUpInside)
 
-//        resetButton.titleLabel?.textColor = .black
         resetButton.layer.cornerRadius = 4
-//        resetButton.layer.borderColor = UIColor.orange.cgColor
         resetButton.layer.borderWidth = 1.0
         addSubview(resetButton)
         resetButton.translatesAutoresizingMaskIntoConstraints = false
-        constraints.append(Constraints.constrainTopToBottom(bottomView: resetButton, topView: answerTimeLabel, verticalSpacing: verticalSpacing))
+        constraints.append(Constraints.constrainTopToBottom(bottomView: resetButton, topView: responseTimeLabel, verticalSpacing: verticalSpacing))
         constraints.append(resetButton.centerXAnchor.constraint(equalTo: centerXAnchor))
         constraints.append(resetButton.widthAnchor.constraint(equalToConstant: 200))
         

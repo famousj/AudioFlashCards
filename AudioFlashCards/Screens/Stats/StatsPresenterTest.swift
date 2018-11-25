@@ -20,12 +20,12 @@ class StatsPresenterTest: XCTestCase, StatsPresenterDelegate {
         let percentCorrect = Double.random(in: 0..<1)
         let averageResponseTime = Double.random(in: 5...30)
         model.percentCorrect_nextValue = percentCorrect
-        model.averageAnswerTime_nextValue = averageResponseTime
+        model.averageResponseTime_nextValue = averageResponseTime
         
         let _ = StatsPresenter(statsModel: model, statsView: view)
         
-        XCTAssertEqual(view.renderAnswerTime_counter, 1)
-        XCTAssertTrue(view.renderAnswerTime_paramAnswerTime == averageResponseTime)
+        XCTAssertEqual(view.renderResponseTime_counter, 1)
+        XCTAssertTrue(view.renderResponseTime_paramAnswerTime == averageResponseTime)
         XCTAssertEqual(view.renderPercentCorrect_counter, 1)
         XCTAssertTrue(view.renderPercentCorrect_paramPercentCorrect == percentCorrect)
     }
@@ -62,11 +62,11 @@ class StatsViewMock: StatsView {
         renderPercentCorrect_paramPercentCorrect = percentCorrect
     }
     
-    var renderAnswerTime_counter = 0
-    var renderAnswerTime_paramAnswerTime: Double?
-    override func renderAnswerTime(_ answerTime: Double) {
-        renderAnswerTime_counter += 1
-        renderAnswerTime_paramAnswerTime = answerTime
+    var renderResponseTime_counter = 0
+    var renderResponseTime_paramAnswerTime: Double?
+    override func renderResponseTime(_ answerTime: Double) {
+        renderResponseTime_counter += 1
+        renderResponseTime_paramAnswerTime = answerTime
     }
 }
 
@@ -77,9 +77,9 @@ class StatsModelMock: StatsModel {
         return percentCorrect_nextValue
     }
     
-    var averageAnswerTime_nextValue: Double = 0.0
-    override var averageAnswerTime: Double {
-        return averageAnswerTime_nextValue
+    var averageResponseTime_nextValue: Double = 0.0
+    override var averageResponseTime: Double {
+        return averageResponseTime_nextValue
     }
     
     var resetStatistics_counter = 0
