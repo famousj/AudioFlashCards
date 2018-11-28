@@ -42,6 +42,10 @@ class CardView: UIView {
         }
     }
     
+    @objc func statisticsButtonTapped() {
+        delegate?.cardViewEvent_gesturedViewStatistics()
+    }
+    
     func renderCard(_ card: Card) {
         num1Label.text = String(card.num1)
         num2Label.text = String(card.num2)
@@ -91,12 +95,23 @@ private extension CardView {
         addGestureRecognizer(tapRecognizer)
         
         backgroundColor = .white
-        
+
         self.problemContainerView = problemView
         addSubview(problemContainerView)
         problemContainerView.translatesAutoresizingMaskIntoConstraints = false
         constraints.append(problemContainerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
         constraints += Constraints.horizontalAnchorConstraints(problemContainerView, constant: horizontalMargin)
+        
+        let statisticsButton = UIButton(frame: .zero)
+        statisticsButton.setTitle("⚙︎", for: .normal)
+        statisticsButton.titleLabel?.font = Fonts.statisticsIconFont
+        statisticsButton.setTitleColor(Colors.buttonNormalColor, for: .normal)
+        statisticsButton.setTitleColor(Colors.buttonHighlightedColor, for: .highlighted)
+        statisticsButton.addTarget(self, action: #selector(statisticsButtonTapped), for: .touchUpInside)
+        addSubview(statisticsButton)
+        statisticsButton.translatesAutoresizingMaskIntoConstraints = false
+        constraints.append(statisticsButton.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
+        constraints.append(statisticsButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -horizontalMargin))
         
         setupLabel(instructionsLabel, font: Fonts.instructionFont)
         instructionsLabel.numberOfLines = 1
