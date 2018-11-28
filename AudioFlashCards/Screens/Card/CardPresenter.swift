@@ -2,6 +2,7 @@ import Foundation
 
 protocol CardPresenterDelegate: class {
     func cardPresenterEvent_errorListeningForAnswer(error: Error)
+    func cardPresenterEvent_presentStatistics()
 }
 
 class CardPresenter {
@@ -27,6 +28,10 @@ class CardPresenter {
 }
 
 extension CardPresenter: CardViewDelegate {
+    func cardViewEvent_gesturedViewStatistics() {
+        delegate?.cardPresenterEvent_presentStatistics()
+    }
+    
     func cardViewEvent_gesturedRevealAnswer() {
         view.renderAnswerShown(answerIsCorrect: false)
     }

@@ -41,6 +41,19 @@ class CardControllerTest: XCTestCase {
         XCTAssertEqual(alertAction.title, "Ok")
         XCTAssertEqual(alertAction.style, UIAlertAction.Style.cancel)
     }
+    
+    func test_OnStatistics_DisplaysStatisticsController() {
+        let testObject = CardController()
+        UIApplication.shared.delegate!.window!!.rootViewController = testObject
+        
+        testObject.cardPresenterEvent_presentStatistics()
+        
+        let expectedError = NSError(domain: "test domain", code: Int.random(in: 17...24), userInfo: nil)
+        testObject.cardPresenterEvent_errorListeningForAnswer(error: expectedError)
+        
+        let controller = testObject.presentedViewController
+        XCTAssertTrue(controller!.isKind(of: StatsController.self))
+    }
 }
 
 class CardPresenterMock: CardPresenter {

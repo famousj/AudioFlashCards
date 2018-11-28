@@ -4,6 +4,7 @@ struct Fonts {
     static let numberFont = UIFont.systemFont(ofSize: 100)
     static let speechRecognitionFont = UIFont.systemFont(ofSize: 12)
     static let instructionFont = UIFont.italicSystemFont(ofSize: 32)
+    static let statisticsIconFont = UIFont.italicSystemFont(ofSize: 32)
     
     static let titleFont = UIFont.boldSystemFont(ofSize: 32)
     static let statisticCategoryFont = UIFont.boldSystemFont(ofSize: 20)

@@ -3,6 +3,7 @@ import UIKit
 protocol CardViewDelegate: class {
     func cardViewEvent_gesturedRevealAnswer()
     func cardViewEvent_gesturedDoneWithCard()
+    func cardViewEvent_gesturedViewStatistics()
 }
 
 class CardView: UIView {

@@ -3,6 +3,12 @@ import XCTest
 
 class CardPresenterTest: XCTestCase, CardPresenterDelegate {
     
+    override func setUp() {
+        super.setUp()
+        cardPresenterEvent_presentStatistics_counter = 0
+        cardPresenterEvent_errorListeningForAnswer_counter = 0
+    }
+    
     func test_OnInit_SetsItselfToViewDelegate() {
         let view = CardView()
         let testObject = CardPresenter(cardModel: CardModel(), view: view)
@@ -108,11 +114,25 @@ class CardPresenterTest: XCTestCase, CardPresenterDelegate {
         XCTAssertEqual(view.renderAnswerShown_paramAnswerIsCorrect, false)
     }
     
+    func test_WhenViewGesturedToShowStatistics_CallDelegate() {
+        let testObject = CardPresenter(cardModel: CardModelMock(), view: CardViewMock())
+        testObject.delegate = self
+        
+        testObject.cardViewEvent_gesturedViewStatistics()
+        
+        XCTAssertEqual(cardPresenterEvent_presentStatistics_counter, 1)
+    }
+    
     var cardPresenterEvent_errorListeningForAnswer_counter = 0
     var cardPresenterEvent_errorListeningForAnswer_paramError: Error?
     func cardPresenterEvent_errorListeningForAnswer(error: Error) {
         cardPresenterEvent_errorListeningForAnswer_counter += 1
         cardPresenterEvent_errorListeningForAnswer_paramError = error
+    }
+
+    var cardPresenterEvent_presentStatistics_counter = 0
+    func cardPresenterEvent_presentStatistics() {
+        cardPresenterEvent_presentStatistics_counter += 1
     }
 }
 

@@ -11,9 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             window = UIWindow(frame: UIScreen.main.bounds)
             window?.makeKeyAndVisible()
-            // TODO: change this back
-//            window?.rootViewController = CardController()
-            window?.rootViewController = StatsController()
+            window?.rootViewController = CardController()
             return true
     }
 }

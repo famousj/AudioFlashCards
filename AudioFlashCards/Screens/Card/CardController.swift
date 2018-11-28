@@ -32,16 +32,26 @@ class CardController: UIViewController {
 
         cardPresenter.showNextCard()
     }
-    
+}
+
+private extension CardController {
     private func displayAlert(title: String, error: Error) {
         let alertController = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
-
+        
         alertController.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
+    }
+    
+    private func presentStatisticsController() {
+        present(StatsController(), animated: true, completion: nil)
     }
 }
 
 extension CardController: CardPresenterDelegate {
+    func cardPresenterEvent_presentStatistics() {
+        presentStatisticsController()
+    }
+    
     func cardPresenterEvent_errorListeningForAnswer(error: Error) {
         displayAlert(title: "Error Listening", error: error)
     }
