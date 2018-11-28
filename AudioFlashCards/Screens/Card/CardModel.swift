@@ -1,5 +1,6 @@
 import Foundation
 import Speech
+import os
 
 protocol CardModelDelegate: class {
     func cardModelEvent_errorListeningForAnswer(error: Error)
@@ -43,6 +44,7 @@ class CardModel {
     
     func startListeningForAnswer() {
         do {
+            os_log("Starting listening...")
             try numberRecognizer.startListening()
         } catch {
             delegate?.cardModelEvent_errorListeningForAnswer(error: error)
@@ -52,12 +54,16 @@ class CardModel {
 
 extension CardModel: NumberRecognizerDelegate {
     func numberRecognizerEvent_textRecognized(text: String) {
+        os_log("Recognized text: %@", text)
         delegate?.cardModelEvent_textRecognized(text: text)
         
+        os_log("Stopping listening...")
         numberRecognizer.stopListening()
     }
     
     func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult) {
+        os_log("Received final result: %@", log: .default, type: .debug, result.transcriptions)
+        
         let textNumber = result.transcriptions
             .map { (transcription) -> Int in
                 let text = transcription.formattedString
