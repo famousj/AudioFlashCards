@@ -2,6 +2,7 @@ import UIKit
 
 protocol StatsViewDelegate: class {
     func statsViewEvent_gesturedToResetStats()
+    func statsViewEvent_gesturedToClose()
 }
 
 class StatsView: UIView {
@@ -21,6 +22,10 @@ class StatsView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func closeButtonPressed() {
+        delegate?.statsViewEvent_gesturedToClose()
     }
     
     @objc private func resetButtonPressed() {
@@ -47,6 +52,15 @@ private extension StatsView {
         
         backgroundColor = .white
         
+        let closeButton = UIButton(frame: .zero)
+        closeButton.setImage(#imageLiteral(resourceName: "close"), for: .normal)
+        closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
+        addSubview(closeButton)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        constraints.append(closeButton.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
+        constraints.append(closeButton.leftAnchor.constraint(equalTo: leftAnchor, constant: horizontalMargin))
+        
+        
         let titleLabel = UILabel()
         titleLabel.text = "Statistics for Addition Cards"
         titleLabel.numberOfLines = 0
@@ -55,7 +69,7 @@ private extension StatsView {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         constraints += Constraints.horizontalAnchorConstraints(titleLabel, constant: horizontalMargin)
-        constraints.append(titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin))
+        constraints.append(titleLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: verticalSpacing))
 
         percentCorrectLabel.attributedText = statString(title: percentCorrectLabelTitle, stat: "")
         percentCorrectLabel.textAlignment = .left

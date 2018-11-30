@@ -40,4 +40,21 @@ class StatsControllerTest: XCTestCase {
         XCTAssertEqual(alertAction1.title, "No")
         XCTAssertEqual(alertAction1.style, UIAlertAction.Style.`default`)
     }
+    
+    func test_WhenCloseRequested_ThenCloses() {
+        let cardController = CardController()
+        UIApplication.shared.delegate!.window!!.rootViewController = cardController
+        
+        let exp = expectation(description: "Wait for test object to be dismissed")
+        
+        let testObject = StatsController()
+        cardController.present(testObject, animated: true) {
+            print("Complete block for present")
+            exp.fulfill()
+        }
+        
+        testObject.statsPresenterEvent_closeRequested()
+
+        wait(for: [exp], timeout: 2.0)
+    }
 }

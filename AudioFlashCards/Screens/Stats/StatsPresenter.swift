@@ -2,6 +2,7 @@ import Foundation
 
 protocol StatsPresenterDelegate: class {
     func statsPresenterEvent_resetStatsRequested()
+    func statsPresenterEvent_closeRequested()
 }
 
 class StatsPresenter {
@@ -19,11 +20,17 @@ class StatsPresenter {
     
     func resetStatistics() {
         statsModel.resetStatistics()
+        
+        // TODO Reload the view
     }
 }
 
 extension StatsPresenter: StatsViewDelegate {
     func statsViewEvent_gesturedToResetStats() {
         delegate?.statsPresenterEvent_resetStatsRequested()
+    }
+    
+    func statsViewEvent_gesturedToClose() {
+        delegate?.statsPresenterEvent_closeRequested()
     }
 }

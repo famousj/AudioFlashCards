@@ -5,6 +5,7 @@ class StatsPresenterTest: XCTestCase, StatsPresenterDelegate {
 
     override func setUp() {
         statsPresenterEvent_resetStatsRequested_counter = 0
+        statsPresenterEvent_closeRequested_counter = 0
     }
     
     func test_OnInit_SetsItselfToViewDelegate() {
@@ -48,10 +49,26 @@ class StatsPresenterTest: XCTestCase, StatsPresenterDelegate {
         XCTAssertEqual(model.resetStatistics_counter, 1)
     }
     
+    func test_WhenViewGesturesToClose_ThenCallsDelegate() {
+        let testObject = StatsPresenter(statsModel: StatsModelMock(), statsView: StatsViewMock())
+        testObject.delegate = self
+        
+        testObject.statsViewEvent_gesturedToClose()
+        
+        XCTAssertEqual(statsPresenterEvent_closeRequested_counter, 1)
+    }
+    
     var statsPresenterEvent_resetStatsRequested_counter = 0
     func statsPresenterEvent_resetStatsRequested() {
         statsPresenterEvent_resetStatsRequested_counter += 1
     }
+    
+    var statsPresenterEvent_closeRequested_counter = 0
+    func statsPresenterEvent_closeRequested() {
+        statsPresenterEvent_closeRequested_counter += 1
+    }
+    
+
 }
 
 class StatsViewMock: StatsView {

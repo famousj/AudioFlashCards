@@ -38,6 +38,10 @@ private extension StatsController {
 }
 
 extension StatsController: StatsPresenterDelegate {
+    func statsPresenterEvent_closeRequested() {
+        dismiss(animated: true, completion: nil)
+    }
+    
     func statsPresenterEvent_resetStatsRequested() {
         displayResetStatsAlert()
     }
