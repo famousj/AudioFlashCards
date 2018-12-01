@@ -2,6 +2,9 @@ import Foundation
 import Speech
 
 class NumberFilter {
+    
+    static let notFound = -1
+    
     private let zeroWords = ["zero"]
     private let oneWords = ["one"]
     private let twoWords = ["two", "to", "too"]
@@ -13,7 +16,7 @@ class NumberFilter {
     private let eightWords = ["eight"]
     private let nineWords = ["nine"]
     
-    private var numberWords: [[String]]
+    let numberWords: [[String]]
     
     init() {
         numberWords = [zeroWords,
@@ -29,7 +32,22 @@ class NumberFilter {
     }
     
     func getNumberFromRecognitionResults(_ results: SFSpeechRecognitionResult) -> Int {
-        return -1
+//        let textNumber = results.transcriptions
+//            .map { (transcription) -> Int in
+//                let text = transcription.formattedString
+//                return getNumberFromTranscriptionText(text)
+//            }
+//            .filter{ $0 != -1 }
+//            .first ?? -1
+        
+                
+        return results.transcriptions
+            .map { (transcription) -> Int in
+                let text = transcription.formattedString
+                return getNumberFromTranscriptionText(text)
+            }
+            .filter{ $0 != NumberFilter.notFound }
+            .first ?? NumberFilter.notFound
     }
     
     func getNumberFromTranscriptionText(_ text: String) -> Int {
@@ -45,6 +63,6 @@ class NumberFilter {
             }
         }
         
-        return -1
+        return NumberFilter.notFound
     }
 }

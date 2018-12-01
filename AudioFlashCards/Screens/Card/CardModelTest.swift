@@ -81,126 +81,73 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertEqual(numberRecognizer.stopListening_counter, 1)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilterWithBestTransactionText() {
+    func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilterWithResults() {
+        let cardDeck = CardDeck(cards: [Card.testInstance])
         let numberFilter = NumberFilterMock()
-        numberFilter.getNumberFromTranscriptionText_returnValues = [-1]
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         
-        let testText = String(Int.random(in: 0...20))
-        let transcription = TranscriptionMock(formattedString: testText)
-        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
-        
-        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
-        
-        XCTAssertEqual(numberFilter.getNumberFromTranscriptionText_counter, 1)
-        XCTAssertTrue(numberFilter.getNumberFromTranscriptionText_paramText == testText)
-    }
-    
-    func test_WhenReceiveListenerTextRecognizedEvent_AndFirstTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
-        let numberFilter = NumberFilterMock()
-        let testCard = Card.testInstance
-        let cardDeck = CardDeck(cards: [testCard])
-        
-        let transcription = TranscriptionMock(formattedString: "")
-        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
+        let _ = testObject.nextCard()
 
+        let expectedResults = SpeechRecognitionResultMock()        
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(expectedResults)
+        
+        XCTAssertEqual(numberFilter.getNumberFromRecognitionResults_counter, 1)
+        XCTAssertTrue(numberFilter.getNumberFromRecognitionResults_paramResults === expectedResults)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndAnswerMatches_TellsDelegateAnswerIsCorrect() {
+        let testCard = Card.testInstance
+        let cardDeck = CardDeck(cards: [testCard])
+        let numberFilter = NumberFilterMock()
+        
         let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         testObject.delegate = self
         
         let _ = testObject.nextCard()
         
-        numberFilter.getNumberFromTranscriptionText_returnValues = [testCard.answer]
-        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        numberFilter.getNumberFromRecognitionResults_returnValue = testCard.answer
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
     }
+
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndLaterTextMatchesAnswer_TellsDelegateAnswerIsCorrect() {
-        let numberFilter = NumberFilterMock()
+    func test_WhenReceiveListenerTextRecognizedEvent_AndNoMatch_TellsDelegateAnswerIsWrong() {
         let testCard = Card.testInstance
         let cardDeck = CardDeck(cards: [testCard])
-        
-        let transcriptionsLength: Int = Int.random(in: 5...10)
-        let transcriptions: [SFTranscription] = (0..<transcriptionsLength).map { _ in
-            return TranscriptionMock(formattedString: String.randomString)
-        }
-        let result = SpeechRecognitionResultMock(transcriptions: transcriptions)
-        
-        let goodIndex = Int.random(in: 0..<transcriptionsLength)
-        let numberFilterReturnValues: [Int] = (0..<transcriptionsLength).map {
-            if $0 == goodIndex {
-                return testCard.answer
-            } else {
-                return -1
-            }
-        }
-        numberFilter.getNumberFromTranscriptionText_returnValues = numberFilterReturnValues
+        let numberFilter = NumberFilterMock()
         
         let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         testObject.delegate = self
+        
         let _ = testObject.nextCard()
         
-        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        numberFilter.getNumberFromRecognitionResults_returnValue = NumberFilter.notFound
         
-        XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
-    }
-    
-    func test_WhenReceiveListenerTextRecognizedEvent_AndNoTextIsANumber_TellsDelegateAnswerIsWrong() {
-        let numberFilter = NumberFilterMock()
-        let testCard = Card.testInstance
-        let cardDeck = CardDeck(cards: [testCard])
-        
-        let transcriptionsLength: Int = Int.random(in: 10...20)
-        let transcriptions: [SFTranscription] = (0..<transcriptionsLength).map { _ in
-            return TranscriptionMock(formattedString: String.randomString)
-        }
-        let result = SpeechRecognitionResultMock(transcriptions: transcriptions)
-        
-        let numberFilterReturnValues: [Int] = (0..<transcriptionsLength).map { _ in return -1 }
-        numberFilter.getNumberFromTranscriptionText_returnValues = numberFilterReturnValues
-        
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
-        testObject.delegate = self
-        let _ = testObject.nextCard()
-        
-        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
         
         XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndTextIsIncorrectNumber_TellsDelegateAnswerIsWrong() {
-        let numberFilter = NumberFilterMock()
-        let testCard = Card.testInstance
-        let cardDeck = CardDeck(cards: [testCard])
-        
-        let transcription = TranscriptionMock(formattedString: "")
-        let result = SpeechRecognitionResultMock(transcriptions: [transcription])
-        
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
-        testObject.delegate = self
-        
-        let _ = testObject.nextCard()
-        
-        let wrongAnswer = testCard.answer + Int.random(in: 1...10)
-        numberFilter.getNumberFromTranscriptionText_returnValues = [wrongAnswer]
-        testObject.numberRecognizerEvent_receivedFinalResult(result: result)
-        
-        XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
-    }
-    
-    func test_WhenReceiveListenerTextRecognizedEvent_AndNoCurrentCard_TellsDelegateAnswerIsCorrect() {
-        let numberFilter = NumberFilterMock()
+    func test_WhenReceiveListenerTextRecognizedEvent_AndNoCurrentCard_DoesNotCallDelegate() {
         let cardDeck = emptyCardDeck
+        let numberFilter = NumberFilterMock()
         
         let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
         testObject.delegate = self
         
         let _ = testObject.nextCard()
         
-        testObject.numberRecognizerEvent_textRecognized(text: String("the right answer"))
+        numberFilter.getNumberFromRecognitionResults_returnValue = Int.random(in: 0...10)
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 0)
+        XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 0)
     }
+    
     
     var cardModelEvent_errorListeningForAnswer_counter = 0
     var cardModelEvent_errorListeningForAnswer_paramError: Error?
@@ -227,7 +174,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     }
 }
 
-class NumberRecognizerMock: NumberRecognizer {
+class NumberRecognizerMock: AnswerRecognizer {
     var startListening_counter = 0
     var startListening_nextError: Error?
     override func startListening() throws {
@@ -252,42 +199,13 @@ class NumberFilterMock: NumberFilter {
         getNumberFromTranscriptionText_paramText = text
         return getNumberFromTranscriptionText_returnValues.removeFirst()
     }
-}
-
-class SpeechRecognitionResultMock: SFSpeechRecognitionResult {
     
-    let transcriptionsReturn: [SFTranscription]
-    init(transcriptions: [SFTranscription]) {
-        transcriptionsReturn = transcriptions
-
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var bestTranscription: SFTranscription {
-        return transcriptionsReturn[0]
-    }
-    
-    override var transcriptions: [SFTranscription] {
-        return transcriptionsReturn
-    }
-}
-
-class TranscriptionMock: SFTranscription {
-    let formattedStringReturn: String
-    init(formattedString: String) {
-        formattedStringReturn = formattedString
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var formattedString: String {
-        return formattedStringReturn
+    var getNumberFromRecognitionResults_counter = 0
+    var getNumberFromRecognitionResults_paramResults: SFSpeechRecognitionResult?
+    var getNumberFromRecognitionResults_returnValue: Int?
+    override func getNumberFromRecognitionResults(_ results: SFSpeechRecognitionResult) -> Int {
+        getNumberFromRecognitionResults_counter += 1
+        getNumberFromRecognitionResults_paramResults = results
+        return getNumberFromRecognitionResults_returnValue ?? NumberFilter.notFound
     }
 }

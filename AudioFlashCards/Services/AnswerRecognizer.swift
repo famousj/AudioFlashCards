@@ -3,12 +3,12 @@ import Speech
 
 protocol NumberRecognizerDelegate: class {
     func numberRecognizerEvent_textRecognized(text: String)
-    func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult)
+    func numberRecognizerEvent_receivedFinalResults(_ results: SFSpeechRecognitionResult)
 }
 
 // Code here is lifted liberally from Apple's Spoken Word demo
 // Details here: https://developer.apple.com/documentation/speech/recognizing_speech_in_live_audio
-class NumberRecognizer: NSObject {
+class AnswerRecognizer: NSObject {
     private let audioEngine = AVAudioEngine()
     private let speechRecognizer: SFSpeechRecognizer
     
@@ -74,7 +74,7 @@ class NumberRecognizer: NSObject {
             
             isFinal = result.isFinal
             if (isFinal) {
-                delegate?.numberRecognizerEvent_receivedFinalResult(result: result)
+                delegate?.numberRecognizerEvent_receivedFinalResults(result)
             }
         }
         
@@ -89,7 +89,7 @@ class NumberRecognizer: NSObject {
     }
 }
 
-extension NumberRecognizer: SFSpeechRecognizerDelegate {
+extension AnswerRecognizer: SFSpeechRecognizerDelegate {
 
     public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
         // TODO Handle availability changing

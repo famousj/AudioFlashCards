@@ -25,7 +25,7 @@
 		D8E7CA842196951B00E6A0D9 /* CardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA832196951B00E6A0D9 /* CardTest.swift */; };
 		D8E7CA862197384600E6A0D9 /* CardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA852197384600E6A0D9 /* CardDeck.swift */; };
 		D8E7CA882197390100E6A0D9 /* CardDeckTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */; };
-		D8E7CA8D2198720400E6A0D9 /* NumberRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */; };
+		D8E7CA8D2198720400E6A0D9 /* AnswerRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA8C2198720400E6A0D9 /* AnswerRecognizer.swift */; };
 		D8E7CA8F2198950800E6A0D9 /* CardControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA8E2198950800E6A0D9 /* CardControllerTest.swift */; };
 		D8E7CA912198BCFA00E6A0D9 /* NumberFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */; };
 		D8E7CA932198C25D00E6A0D9 /* NumberFilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */; };
@@ -70,7 +70,7 @@
 		D8E7CA832196951B00E6A0D9 /* CardTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTest.swift; sourceTree = "<group>"; };
 		D8E7CA852197384600E6A0D9 /* CardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeck.swift; sourceTree = "<group>"; };
 		D8E7CA872197390100E6A0D9 /* CardDeckTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckTest.swift; sourceTree = "<group>"; };
-		D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberRecognizer.swift; sourceTree = "<group>"; };
+		D8E7CA8C2198720400E6A0D9 /* AnswerRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerRecognizer.swift; sourceTree = "<group>"; };
 		D8E7CA8E2198950800E6A0D9 /* CardControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardControllerTest.swift; sourceTree = "<group>"; };
 		D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFilter.swift; sourceTree = "<group>"; };
 		D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFilterTest.swift; sourceTree = "<group>"; };
@@ -140,7 +140,7 @@
 		D8E7CA89219772D300E6A0D9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				D8E7CA8C2198720400E6A0D9 /* NumberRecognizer.swift */,
+				D8E7CA8C2198720400E6A0D9 /* AnswerRecognizer.swift */,
 				D8E7CA902198BCFA00E6A0D9 /* NumberFilter.swift */,
 				D8E7CA922198C25D00E6A0D9 /* NumberFilterTest.swift */,
 			);
@@ -341,7 +341,7 @@
 				D89A519F21A36859009A3ECC /* DataStore.swift in Sources */,
 				D8EA8C612195392D00B1D9D7 /* CardView.swift in Sources */,
 				D81E7ACD219F1AEB008D5212 /* Constraints.swift in Sources */,
-				D8E7CA8D2198720400E6A0D9 /* NumberRecognizer.swift in Sources */,
+				D8E7CA8D2198720400E6A0D9 /* AnswerRecognizer.swift in Sources */,
 				D8EA8C5D219538D800B1D9D7 /* CardController.swift in Sources */,
 				D8EA8C632195394B00B1D9D7 /* CardPresenter.swift in Sources */,
 				D89A519921A2FB87009A3ECC /* StatsModel.swift in Sources */,

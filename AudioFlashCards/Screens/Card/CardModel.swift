@@ -13,7 +13,7 @@ protocol CardModelDelegate: class {
 class CardModel {
     var cardDeck: CardDeck
     
-    private let numberRecognizer: NumberRecognizer
+    private let numberRecognizer: AnswerRecognizer
     private let numberFilter: NumberFilter
     
     private var currentCard: Card?
@@ -24,12 +24,12 @@ class CardModel {
         let min = 0
         let max = 9
         let cardDeck = CardDeck.additionDeck(min: min, max: max)
-        let numberRecognizer = NumberRecognizer()
+        let numberRecognizer = AnswerRecognizer()
         let numberFilter = NumberFilter()
         self.init(cardDeck: cardDeck, numberRecognizer: numberRecognizer, numberFilter: numberFilter)
     }
     
-    init(cardDeck: CardDeck, numberRecognizer: NumberRecognizer, numberFilter: NumberFilter) {
+    init(cardDeck: CardDeck, numberRecognizer: AnswerRecognizer, numberFilter: NumberFilter) {
         self.cardDeck = cardDeck
         self.numberRecognizer = numberRecognizer
         self.numberFilter = numberFilter
@@ -61,21 +61,13 @@ extension CardModel: NumberRecognizerDelegate {
         numberRecognizer.stopListening()
     }
     
-    func numberRecognizerEvent_receivedFinalResult(result: SFSpeechRecognitionResult) {
-        os_log("Received final result: %@", log: .default, type: .debug, result.transcriptions)
-        
-        let textNumber = result.transcriptions
-            .map { (transcription) -> Int in
-                let text = transcription.formattedString
-                return numberFilter.getNumberFromTranscriptionText(text)
-            }
-            .filter{ $0 != -1 }
-            .first ?? -1
-        
+    func numberRecognizerEvent_receivedFinalResults(_ results: SFSpeechRecognitionResult) {
+        os_log("Received final result: %@", log: .default, type: .debug, results.transcriptions)
+
         guard let answer = currentCard?.answer else { return }
-        
-        if textNumber == answer {
-            delegate?.cardModelEvent_correctAnswerRecognized()
+
+        if numberFilter.getNumberFromRecognitionResults(results) == answer {
+                 delegate?.cardModelEvent_correctAnswerRecognized()
         } else {
             delegate?.cardModelEvent_wrongAnswerRecognized()
         }
