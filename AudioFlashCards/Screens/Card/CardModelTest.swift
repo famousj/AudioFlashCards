@@ -15,7 +15,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     
     func test_onInit_SetsItselfAsRecognizerDelegate() {
         let numberRecognizer = NumberRecognizerMock()
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
+        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter(), dataStore: DataStoreMock())
         
         XCTAssertTrue(numberRecognizer.delegate === testObject)
     }
@@ -33,14 +33,18 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     func test_NextCard_WhenDeckIsEmpty_ReturnsNil() {
         let testObject = CardModel(cardDeck: emptyCardDeck,
                                    numberRecognizer: NumberRecognizerMock(),
-                                   numberFilter: NumberFilter())
+                                   numberFilter: NumberFilter(),
+                                   dataStore: DataStoreMock())
         
         XCTAssertNil(testObject.nextCard())
     }
     
     func test_ListenForAnswer_StartsNumberRecognizer() {
         let numberRecognizer = NumberRecognizerMock()
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
+        let testObject = CardModel(cardDeck: emptyCardDeck,
+                                   numberRecognizer: numberRecognizer,
+                                   numberFilter: NumberFilter(),
+                                   dataStore: DataStoreMock())
         
         testObject.startListeningForAnswer()
         XCTAssertEqual(numberRecognizer.startListening_counter, 1)
@@ -48,7 +52,10 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     
     func test_ListenForAnswer_WhenThrows_SendsErrorEvent() {
         let numberRecognizer = NumberRecognizerMock()
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
+        let testObject = CardModel(cardDeck: emptyCardDeck,
+                                   numberRecognizer: numberRecognizer,
+                                   numberFilter: NumberFilter(),
+                                   dataStore: DataStoreMock())
         testObject.delegate = self
         
         let expectedError = NSError(domain: "PC-LOAD-LTR", code: Int.random(in: 42...4242), userInfo: nil)
@@ -61,7 +68,10 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     }
     
     func test_WhenReceiveListenerTextRecognizedEvent_CallsDelegateMethod() {
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: NumberFilter())
+        let testObject = CardModel(cardDeck: emptyCardDeck,
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: NumberFilter(),
+                                   dataStore: DataStoreMock())
         testObject.delegate = self
         
         let testText = String(Int.random(in: 0...20))
@@ -73,7 +83,10 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     
     func test_WhenReceiveListenerTextRecognizedEvent_StopsListening() {
         let numberRecognizer = NumberRecognizerMock()
-        let testObject = CardModel(cardDeck: emptyCardDeck, numberRecognizer: numberRecognizer, numberFilter: NumberFilter())
+        let testObject = CardModel(cardDeck: emptyCardDeck,
+                                   numberRecognizer: numberRecognizer,
+                                   numberFilter: NumberFilter(),
+                                   dataStore: DataStoreMock())
         
         let testText = String(Int.random(in: 0...20))
         testObject.numberRecognizerEvent_textRecognized(text: testText)
@@ -84,7 +97,10 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     func test_WhenReceiveListenerTextRecognizedEvent_CallsNumberFilterWithResults() {
         let cardDeck = CardDeck(cards: [Card.testInstance])
         let numberFilter = NumberFilterMock()
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        let testObject = CardModel(cardDeck: cardDeck,
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: DataStoreMock())
         
         let _ = testObject.nextCard()
 
@@ -98,10 +114,14 @@ class CardModelTest: XCTestCase, CardModelDelegate {
     
     func test_WhenReceiveListenerTextRecognizedEvent_AndAnswerMatches_TellsDelegateAnswerIsCorrect() {
         let testCard = Card.testInstance
-        let cardDeck = CardDeck(cards: [testCard])
         let numberFilter = NumberFilterMock()
         
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        let dataStore = DataStoreMock()
+        
+        let testObject = CardModel(cardDeck: CardDeck(cards: [testCard]),
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: dataStore)
         testObject.delegate = self
         
         let _ = testObject.nextCard()
@@ -112,14 +132,40 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         
         XCTAssertEqual(cardModelEvent_correctAnswerRecognized_counter, 1)
     }
-
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndNoMatch_TellsDelegateAnswerIsWrong() {
+    func test_WhenReceiveListenerTextRecognizedEvent_AndAnswerMatches_UpdatesDataStore() {
         let testCard = Card.testInstance
-        let cardDeck = CardDeck(cards: [testCard])
         let numberFilter = NumberFilterMock()
         
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        let dataStore = DataStoreMock()
+        let correct = Int.random(in: 20...30)
+        let incorrect = Int.random(in: 100...200)
+        dataStore.cardsCorrect = correct
+        dataStore.cardsIncorrect = incorrect
+        
+        let testObject = CardModel(cardDeck: CardDeck(cards: [testCard]),
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: dataStore)
+        
+        let _ = testObject.nextCard()
+        
+        numberFilter.getNumberFromRecognitionResults_returnValue = testCard.answer
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
+        
+        XCTAssertEqual(dataStore.cardsCorrect, correct + 1)
+        XCTAssertEqual(dataStore.cardsIncorrect, incorrect)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndNotFound_TellsDelegateAnswerIsWrong() {
+        let testCard = Card.testInstance
+        let numberFilter = NumberFilterMock()
+        
+        let testObject = CardModel(cardDeck: CardDeck(cards: [testCard]),
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: DataStoreMock())
         testObject.delegate = self
         
         let _ = testObject.nextCard()
@@ -131,11 +177,56 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
     }
     
-    func test_WhenReceiveListenerTextRecognizedEvent_AndNoCurrentCard_DoesNotCallDelegate() {
-        let cardDeck = emptyCardDeck
+    func test_WhenReceiveListenerTextRecognizedEvent_AndWrongAnswer_TellsDelegateAnswerIsWrong() {
+        let testCard = Card.testInstance
         let numberFilter = NumberFilterMock()
         
-        let testObject = CardModel(cardDeck: cardDeck, numberRecognizer: NumberRecognizerMock(), numberFilter: numberFilter)
+        let testObject = CardModel(cardDeck: CardDeck(cards: [testCard]),
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: DataStoreMock())
+        testObject.delegate = self
+        
+        let _ = testObject.nextCard()
+        
+        numberFilter.getNumberFromRecognitionResults_returnValue = testCard.answer + Int.random(in: 1...10)
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
+        
+        XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 1)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndAnswerDoesNotMatches_UpdatesDataStore() {
+        let numberFilter = NumberFilterMock()
+        
+        let dataStore = DataStoreMock()
+        let correct = Int.random(in: 20...30)
+        let incorrect = Int.random(in: 100...200)
+        dataStore.cardsCorrect = correct
+        dataStore.cardsIncorrect = incorrect
+        
+        let testObject = CardModel(cardDeck: CardDeck(cards: [Card.testInstance]),
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: dataStore)
+        
+        let _ = testObject.nextCard()
+        
+        numberFilter.getNumberFromRecognitionResults_returnValue = NumberFilter.notFound
+        
+        testObject.numberRecognizerEvent_receivedFinalResults(SpeechRecognitionResultMock())
+        
+        XCTAssertEqual(dataStore.cardsCorrect, correct)
+        XCTAssertEqual(dataStore.cardsIncorrect, incorrect + 1)
+    }
+    
+    func test_WhenReceiveListenerTextRecognizedEvent_AndNoCurrentCard_DoesNotCallDelegate() {
+        let numberFilter = NumberFilterMock()
+        
+        let testObject = CardModel(cardDeck: emptyCardDeck,
+                                   numberRecognizer: NumberRecognizerMock(),
+                                   numberFilter: numberFilter,
+                                   dataStore: DataStoreMock())
         testObject.delegate = self
         
         let _ = testObject.nextCard()
@@ -148,7 +239,7 @@ class CardModelTest: XCTestCase, CardModelDelegate {
         XCTAssertEqual(cardModelEvent_wrongAnswerRecognized_counter, 0)
     }
     
-    
+        
     var cardModelEvent_errorListeningForAnswer_counter = 0
     var cardModelEvent_errorListeningForAnswer_paramError: Error?
     func cardModelEvent_errorListeningForAnswer(error: Error) {

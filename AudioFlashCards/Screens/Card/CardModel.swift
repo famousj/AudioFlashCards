@@ -15,6 +15,7 @@ class CardModel {
     
     private let numberRecognizer: AnswerRecognizer
     private let numberFilter: NumberFilter
+    private let dataStore: DataStore
     
     private var currentCard: Card?
     
@@ -26,13 +27,17 @@ class CardModel {
         let cardDeck = CardDeck.additionDeck(min: min, max: max)
         let numberRecognizer = AnswerRecognizer()
         let numberFilter = NumberFilter()
-        self.init(cardDeck: cardDeck, numberRecognizer: numberRecognizer, numberFilter: numberFilter)
+        self.init(cardDeck: cardDeck,
+                  numberRecognizer: numberRecognizer,
+                  numberFilter: numberFilter,
+                  dataStore: DataStore.sharedInstance)
     }
     
-    init(cardDeck: CardDeck, numberRecognizer: AnswerRecognizer, numberFilter: NumberFilter) {
+    init(cardDeck: CardDeck, numberRecognizer: AnswerRecognizer, numberFilter: NumberFilter, dataStore: DataStore) {
         self.cardDeck = cardDeck
         self.numberRecognizer = numberRecognizer
         self.numberFilter = numberFilter
+        self.dataStore = dataStore
         numberRecognizer.delegate = self
     }
     
@@ -67,9 +72,11 @@ extension CardModel: NumberRecognizerDelegate {
         guard let answer = currentCard?.answer else { return }
 
         if numberFilter.getNumberFromRecognitionResults(results) == answer {
-                 delegate?.cardModelEvent_correctAnswerRecognized()
+            delegate?.cardModelEvent_correctAnswerRecognized()
+            dataStore.cardsCorrect += 1
         } else {
             delegate?.cardModelEvent_wrongAnswerRecognized()
+            dataStore.cardsIncorrect += 1
         }
     }
 }
